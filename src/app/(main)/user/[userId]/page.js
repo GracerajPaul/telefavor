@@ -63,23 +63,27 @@ export default function PublicProfilePage() {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-5 mb-4">
-        <div className="flex gap-4">
-          <Avatar src={userData.photo_url} name={userData.display_name} size={56} />
+      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 md:p-5 mb-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex items-start gap-4 sm:flex-col sm:items-center">
+            <Avatar src={userData.photo_url} name={userData.display_name} size={48} />
+            {!isSelf && (
+              <button onClick={handleContact} className="sm:hidden flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#06B6D4]/15 text-[#06B6D4] text-[12px] font-semibold hover:bg-[#06B6D4]/25 transition-colors active:scale-95">
+                Contact
+              </button>
+            )}
+          </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="text-[20px] font-bold text-white">{userData.display_name || "Unknown"}</h2>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <div className="flex items-center gap-1.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M21 11.5C21 16.1944 17.1944 20 12.5 20C9.38924 20 6.68673 18.1871 5.26782 15.5M3 12.5C3 7.80558 6.80558 4 11.5 4C14.6108 4 17.3133 5.81288 18.7322 8.5" stroke="#06B6D4" strokeWidth="2" strokeLinecap="round"/><path d="M22 6V10H18M2 18V14H6" stroke="#06B6D4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    <a href={`https://t.me/${userData.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-[#06B6D4] text-[14px] hover:underline font-medium">@{userData.telegram_username}</a>
-                    {userData.telegram_verified && (
-                      <span className="text-[11px] text-[#22C55E] font-medium">✓ Verified</span>
-                    )}
-                  </div>
+              <div className="min-w-0">
+                <h2 className="text-[18px] md:text-[20px] font-bold text-white truncate">{userData.display_name || "Unknown"}</h2>
+                <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                  <a href={`https://t.me/${userData.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-[#06B6D4] text-[13px] md:text-[14px] hover:underline font-medium truncate">@{userData.telegram_username}</a>
+                  {userData.telegram_verified && (
+                    <span className="text-[11px] text-[#22C55E] font-medium">✓ Verified</span>
+                  )}
                   {!isSelf && (
-                    <button onClick={handleContact} className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#06B6D4]/15 text-[#06B6D4] text-[11px] font-semibold hover:bg-[#06B6D4]/25 transition-colors active:scale-95">
+                    <button onClick={handleContact} className="hidden sm:flex items-center gap-1 px-3 py-1 rounded-full bg-[#06B6D4]/15 text-[#06B6D4] text-[12px] font-semibold hover:bg-[#06B6D4]/25 transition-colors active:scale-95">
                       Contact
                     </button>
                   )}
@@ -94,22 +98,22 @@ export default function PublicProfilePage() {
                 )}
               </div>
             </div>
-            <div className="flex items-center gap-2 mt-2 text-[12px] text-[#94A3B8]">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[12px] text-[#94A3B8]">
               <span>Joined {userData.created_at ? new Date(userData.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "recently"}</span>
-              <span className="text-[#1E1B3A]">|</span>
+              <span className="text-[#1E1B3A]">·</span>
               <span>{listings.length} listing{listings.length !== 1 ? "s" : ""}</span>
             </div>
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-2 mt-2 flex-wrap">
               <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[15px] font-bold text-white">{userData.total_listings_posted || 0}</p>
+                <p className="text-[14px] md:text-[15px] font-bold text-white">{userData.total_listings_posted || 0}</p>
                 <p className="text-[9px] text-[#94A3B8]">Posts</p>
               </div>
               <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[15px] font-bold text-[#22C55E]">{userData.green_ratings || 0}</p>
+                <p className="text-[14px] md:text-[15px] font-bold text-[#22C55E]">{userData.green_ratings || 0}</p>
                 <p className="text-[9px] text-[#94A3B8]">Green</p>
               </div>
               <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[15px] font-bold text-[#EF4444]">{userData.red_ratings || 0}</p>
+                <p className="text-[14px] md:text-[15px] font-bold text-[#EF4444]">{userData.red_ratings || 0}</p>
                 <p className="text-[9px] text-[#94A3B8]">Red</p>
               </div>
             </div>

@@ -188,11 +188,11 @@ export default function ExplorePage() {
         {refreshing && <div className="flex justify-center py-3"><div className="spinner" /></div>}
 
         {loading ? (
-          <div className="grid grid-cols-2 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <ListingSkeleton key={i} />
-            ))}
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <ListingSkeleton key={i} />
+              ))}
+            </div>
         ) : !hasListings ? (
           <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-fadeIn">
             <div className="w-16 h-16 bg-[#151230] rounded-2xl flex items-center justify-center mb-4 animate-float">
@@ -232,7 +232,7 @@ export default function ExplorePage() {
                 {activeFilters > 0 && " found"}
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-4 pb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-8">
               {filtered.map((listing, idx) => {
                 const userData = userDataMap[listing.user_id];
                 if (!userData) return null;

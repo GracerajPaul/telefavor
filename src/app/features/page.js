@@ -83,7 +83,7 @@ export default function FeaturesPage() {
 
   return (
     <div className="min-h-screen bg-[#0D0B1A] bg-grid">
-      <div className="max-w-5xl mx-auto px-8 py-12">
+      <div className="max-w-5xl mx-auto px-4 md:px-8 py-12">
         <button onClick={() => router.push("/")} className="text-[#94A3B8] hover:text-white transition-colors text-[14px] mb-8 flex items-center gap-1">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
           Back
@@ -94,7 +94,7 @@ export default function FeaturesPage() {
           <div className="w-16 h-16 rounded-2xl overflow-hidden mx-auto mb-6">
             <img src="/logo.jpeg" alt="Telefavor" className="w-full h-full object-cover" />
           </div>
-          <h1 className="text-[44px] font-bold text-white mb-4">
+          <h1 className="text-[28px] md:text-[44px] font-bold text-white mb-4">
             Everything You Need for <span className="gradient-text">Safe Referral Swaps</span>
           </h1>
           <p className="text-[18px] text-[#94A3B8] max-w-2xl mx-auto">
@@ -105,7 +105,7 @@ export default function FeaturesPage() {
 
         {/* Features Grid */}
         <h2 className="text-[22px] font-bold text-white mb-8 text-center">Core Features</h2>
-        <div className="grid grid-cols-3 gap-6 mb-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
           {features.map((f, i) => (
             <div
               key={i}
@@ -142,7 +142,7 @@ export default function FeaturesPage() {
 
         {/* Trust Score Badges */}
         <h2 className="text-[22px] font-bold text-white mb-8 text-center">Trust Badge Levels</h2>
-        <div className="grid grid-cols-5 gap-4 mb-16">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
           {badgeLevels.map((b, i) => (
             <div key={i} className="bg-[#151230] rounded-xl p-4 text-center border border-[#1E1B3A] animate-slideUp" style={{ animationDelay: `${i * 80}ms` }}>
               <div className="text-[24px] font-bold mb-1" style={{ color: b.color }}>{b.label}</div>

@@ -76,8 +76,8 @@ export default function PostListingPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-5 gap-6">
-        <div className="col-span-3">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div className="md:col-span-3">
           <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-6">
             <label className="text-[13px] text-[#94A3B8] font-medium block mb-3">Select Listing Type</label>
             <div className="space-y-1 max-h-[400px] overflow-y-auto pr-1">
@@ -88,7 +88,7 @@ export default function PostListingPage() {
           </div>
         </div>
 
-        <div className="col-span-2 space-y-4">
+        <div className="md:col-span-2 space-y-4">
           <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-6">
             <div className="flex items-center justify-between mb-3">
               <label className="text-[13px] text-[#94A3B8] font-medium">Describe your referral</label>

@@ -167,7 +167,7 @@ export default function LandingPage() {
           <h2 className="text-[32px] font-bold text-white mb-3">Why Telefavor?</h2>
           <p className="text-[#94A3B8] text-[16px] max-w-lg mx-auto">Built for safe, transparent referral swapping on Telegram</p>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {features.map((f, i) => (
             <div key={i} className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-5 hover:border-[#06B6D4]/30 transition-all duration-300 card-hover">
               <div className="w-10 h-10 rounded-lg bg-[#06B6D4]/10 flex items-center justify-center mb-4">{f.icon}</div>
@@ -180,8 +180,8 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-[#1E1B3A] px-6 md:px-12 py-8">
-        <div className="max-w-6xl mx-auto flex items-center justify-between text-[13px] text-[#94A3B8]">
-          <p>Telefavor — Safe Referral Exchanges on Telegram</p>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[13px] text-[#94A3B8]">
+          <p className="text-center md:text-left">Telefavor — Safe Referral Exchanges on Telegram</p>
           <div className="flex items-center gap-4">
             <button onClick={() => router.push("/features")} className="hover:text-white transition-colors">Features</button>
             <button onClick={() => router.push("/terms")} className="hover:text-white transition-colors">Terms</button>

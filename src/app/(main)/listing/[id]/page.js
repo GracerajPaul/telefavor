@@ -93,8 +93,8 @@ export default function ListingDetailPage() {
         <p className="text-[#94A3B8] text-[15px] mt-1">View listing details, check trust score, and connect via Telegram.</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="md:col-span-2 space-y-6">
           <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-6">
             <div className="flex items-center gap-5">
               <Avatar src={poster.photo_url} name={poster.display_name} size={80} onClick={() => router.push(`/user/${listing.user_id}`)} />

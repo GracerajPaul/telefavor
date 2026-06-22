@@ -59,17 +59,34 @@ export default function MyProfilePage() {
         <p className="text-[#94A3B8] text-[15px] mt-1">Manage your account, view your trust score, and track listing history.</p>
       </div>
 
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-6 mb-6">
-        <div className="flex items-start gap-5">
-          <Avatar src={profile.photo_url} name={profile.display_name} size={64} />
-          <div className="flex-1 min-w-0">
-            <h2 className="text-[20px] font-bold text-white">{profile.display_name || "Unknown"}</h2>
-            <p className="text-[#06B6D4] text-[14px] mt-0.5">@{profile.telegram_username || "not set"}
-              {profile.telegram_verified && (
-                <span className="ml-2 text-[11px] text-[#22C55E] font-medium">✓ Verified</span>
-              )}
-            </p>
-            {/* Description inline */}
+      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 md:p-6 mb-6">
+        <div className="flex flex-col md:flex-row items-start gap-4 md:gap-5">
+          <div className="flex items-start gap-4 w-full">
+            <div className="flex-shrink-0">
+              <Avatar src={profile.photo_url} name={profile.display_name} size={48} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[18px] md:text-[20px] font-bold text-white truncate">{profile.display_name || "Unknown"}</h2>
+              <p className="text-[#06B6D4] text-[13px] md:text-[14px] truncate">@{profile.telegram_username || "not set"}
+                {profile.telegram_verified && (
+                  <span className="ml-2 text-[11px] text-[#22C55E] font-medium">✓ Verified</span>
+                )}
+              </p>
+            </div>
+            <div className="flex gap-2 md:gap-3 mt-3 flex-wrap">
+              <div className="text-center px-3 py-2 rounded-lg bg-[#0D0B1A] min-w-[56px] md:min-w-[60px]">
+                <p className="text-[16px] md:text-[18px] font-bold text-white">{profile.total_listings_posted || 0}</p>
+                <p className="text-[10px] text-[#94A3B8]">Posts</p>
+              </div>
+              <div className="text-center px-3 py-2 rounded-lg bg-[#0D0B1A] min-w-[56px] md:min-w-[60px]">
+                <p className="text-[16px] md:text-[18px] font-bold text-[#22C55E]">{profile.green_ratings || 0}</p>
+                <p className="text-[10px] text-[#94A3B8]">Green</p>
+              </div>
+              <div className="text-center px-3 py-2 rounded-lg bg-[#0D0B1A] min-w-[56px] md:min-w-[60px]">
+                <p className="text-[16px] md:text-[18px] font-bold text-[#EF4444]">{profile.red_ratings || 0}</p>
+                <p className="text-[10px] text-[#94A3B8]">Red</p>
+              </div>
+            </div>
             {editingDesc ? (
               <div className="mt-3 space-y-2">
                 <textarea
@@ -97,25 +114,11 @@ export default function MyProfilePage() {
               </div>
             )}
           </div>
-          <div className="flex gap-3 flex-shrink-0">
-            <div className="text-center px-3 py-2 rounded-lg bg-[#0D0B1A] min-w-[60px]">
-              <p className="text-[18px] font-bold text-white">{profile.total_listings_posted || 0}</p>
-              <p className="text-[10px] text-[#94A3B8]">Posts</p>
-            </div>
-            <div className="text-center px-3 py-2 rounded-lg bg-[#0D0B1A] min-w-[60px]">
-              <p className="text-[18px] font-bold text-[#22C55E]">{profile.green_ratings || 0}</p>
-              <p className="text-[10px] text-[#94A3B8]">Green</p>
-            </div>
-            <div className="text-center px-3 py-2 rounded-lg bg-[#0D0B1A] min-w-[60px]">
-              <p className="text-[18px] font-bold text-[#EF4444]">{profile.red_ratings || 0}</p>
-              <p className="text-[10px] text-[#94A3B8]">Red</p>
-            </div>
-          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="md:col-span-2 space-y-6">
           <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-6">
             <h3 className="text-[13px] text-[#94A3B8] font-medium uppercase tracking-wider mb-4">Trust Score</h3>
             <TrustScoreSection userData={profile} size="large" />
