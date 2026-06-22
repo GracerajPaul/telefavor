@@ -2,7 +2,7 @@ import "./globals.css";
 import Providers from "./providers";
 
 export const metadata = {
-  title: "Telefavor",
+  title: "Telefavor - referral exchange",
   description: "Find and connect with people for referral exchanges on Telegram",
 };
 
