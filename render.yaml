@@ -8,4 +8,4 @@ services:
       - key: BOT_TOKEN
         sync: false
       - key: VERIFY_URL
-        value: https://your-app.onrender.com/api/verification/verify
+        value: https://telefavor.onrender.com/api/verification/verify
