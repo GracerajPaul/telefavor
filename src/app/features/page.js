@@ -167,6 +167,8 @@ export default function FeaturesPage() {
             <button onClick={() => router.push("/terms")} className="hover:text-white transition-colors">Terms of Service</button>
             <span>·</span>
             <button onClick={() => router.push("/features")} className="hover:text-white transition-colors">Features</button>
+            <span>·</span>
+            <button onClick={() => router.push("/community")} className="hover:text-white transition-colors">Community</button>
           </div>
         </div>
       </div>

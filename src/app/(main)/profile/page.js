@@ -201,6 +201,8 @@ export default function MyProfilePage() {
         <div className="flex items-center justify-center gap-4">
           <button onClick={() => router.push("/features")} className="hover:text-white transition-colors">Features</button>
           <span className="text-[#1E1B3A]">·</span>
+          <button onClick={() => router.push("/community")} className="hover:text-white transition-colors">Community</button>
+          <span className="text-[#1E1B3A]">·</span>
           <button onClick={() => router.push("/terms")} className="hover:text-white transition-colors">Terms</button>
         </div>
       </div>

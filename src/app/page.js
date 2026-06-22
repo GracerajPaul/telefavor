@@ -73,6 +73,7 @@ export default function LandingPage() {
         </div>
         <div className="flex items-center gap-6">
           <button onClick={() => router.push("/features")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Features</button>
+          <button onClick={() => router.push("/community")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Community</button>
           <button onClick={() => router.push("/terms")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Terms</button>
         </div>
       </nav>
@@ -184,6 +185,7 @@ export default function LandingPage() {
           <p className="text-center md:text-left">Telefavor — Safe Referral Exchanges on Telegram</p>
           <div className="flex items-center gap-4">
             <button onClick={() => router.push("/features")} className="hover:text-white transition-colors">Features</button>
+            <button onClick={() => router.push("/community")} className="hover:text-white transition-colors">Community</button>
             <button onClick={() => router.push("/terms")} className="hover:text-white transition-colors">Terms</button>
           </div>
         </div>
