@@ -7,12 +7,19 @@ const https = require("https");
 const http = require("http");
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
-const VERIFY_URL = process.env.VERIFY_URL || "http://localhost:3000/api/verification/verify";
+const VERIFY_URL = process.env.VERIFY_URL;
 const POLL_INTERVAL = 2000;
 let lastUpdateId = 0;
 
 if (!BOT_TOKEN) {
   console.error("❌ BOT_TOKEN environment variable is required");
+  process.exit(1);
+}
+
+if (!VERIFY_URL) {
+  console.error("❌ VERIFY_URL environment variable is required");
+  console.error("   Set it to your Vercel API URL, e.g.:");
+  console.error("   https://telefavor.vercel.app/api/verification/verify");
   process.exit(1);
 }
 
@@ -125,8 +132,13 @@ const PORT = process.env.PORT || 3001;
 
 function startHealthServer() {
   const server = http.createServer((req, res) => {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ status: "ok", bot: "TelefavorVerificationBot" }));
+    if (req.url === "/" || req.url === "/health") {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ status: "ok", bot: "TelefavorVerificationBot" }));
+    } else {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "not_found" }));
+    }
   });
   server.listen(PORT, () => {
     console.log(`🌐 Health server listening on port ${PORT}`);
@@ -141,11 +153,6 @@ async function main() {
   } else {
     console.error("❌ Failed to connect to Telegram API. Check BOT_TOKEN.");
     process.exit(1);
-  }
-
-  if (!process.env.VERIFY_URL || VERIFY_URL.includes("localhost")) {
-    console.warn("⚠️  VERIFY_URL is set to localhost. Set it to your Vercel app URL in production:");
-    console.warn("   e.g. https://telefavor.vercel.app/api/verification/verify");
   }
 
   startHealthServer();
