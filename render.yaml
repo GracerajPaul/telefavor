@@ -1,10 +1,9 @@
 services:
-  - type: web
+  - type: worker
     name: telefavor-bot
     env: node
     buildCommand: npm install
     startCommand: node telegram-bot.cjs
-    healthCheckPath: /
     envVars:
       - key: BOT_TOKEN
         sync: false
