@@ -105,6 +105,18 @@ async function poll() {
   }
 }
 
+const PORT = process.env.PORT || 3001;
+
+function startHealthServer() {
+  const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ status: "ok", bot: "TelefavorVerificationBot" }));
+  });
+  server.listen(PORT, () => {
+    console.log(`🌐 Health server listening on port ${PORT}`);
+  });
+}
+
 async function main() {
   const me = await apiCall("getMe");
   if (me?.ok) {
@@ -115,6 +127,7 @@ async function main() {
     process.exit(1);
   }
 
+  startHealthServer();
   setInterval(poll, POLL_INTERVAL);
   console.log("👂 Listening for verification codes...");
 }
