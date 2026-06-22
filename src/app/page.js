@@ -46,10 +46,10 @@ export default function LandingPage() {
   const redirected = useRef(false);
 
   useEffect(() => {
-    if (loading || profileLoading || redirected.current) return;
+    if (redirected.current) return;
     if (isAuthenticated) { redirected.current = true; router.replace("/explore"); }
     else if (isLoggedIn && profile && !profile.has_onboarded) { redirected.current = true; router.replace("/onboarding"); }
-  }, [loading, profileLoading, isAuthenticated, isLoggedIn, profile, router]);
+  }, [isAuthenticated, isLoggedIn, profile, router]);
 
   const handleGoogleSignIn = async () => {
     if (!acceptedTerms) return;
@@ -62,14 +62,6 @@ export default function LandingPage() {
       setSigningIn(false);
     }
   };
-
-  if (loading || profileLoading) {
-    return (
-      <div className="min-h-screen bg-[#0D0B1A] flex items-center justify-center">
-        <div className="spinner" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#0D0B1A]">
