@@ -93,21 +93,30 @@ async function poll() {
 
     console.log(`📩 Code received: ${text} from @${telegramUsername} (ID: ${telegramId})`);
 
-    const verifyResult = await callVerifyApi(text, telegramId, telegramUsername);
+    try {
+      const verifyResult = await callVerifyApi(text, telegramId, telegramUsername);
 
-    if (verifyResult?.success) {
+      if (verifyResult?.success) {
+        await apiCall("sendMessage", {
+          chat_id: msg.chat.id,
+          text: `✅ Verification successful! Your Telefavor account is now verified.\n\nYou can close this chat.`,
+        });
+        console.log(`✅ Verified @${telegramUsername}`);
+      } else {
+        const errorMsg = verifyResult?.error || "Verification failed";
+        await apiCall("sendMessage", {
+          chat_id: msg.chat.id,
+          text: `❌ ${errorMsg}\n\nMake sure you entered the exact code shown on Telefavor.`,
+        });
+        console.log(`❌ Failed for @${telegramUsername}: ${errorMsg}`);
+        if (verifyResult) console.log(`🔍 Raw response:`, JSON.stringify(verifyResult));
+      }
+    } catch (err) {
+      console.error(`🔴 API call error for @${telegramUsername}:`, err.message);
       await apiCall("sendMessage", {
         chat_id: msg.chat.id,
-        text: `✅ Verification successful! Your Telefavor account is now verified.\n\nYou can close this chat.`,
+        text: `❌ Could not reach the verification server. Please try again later.`,
       });
-      console.log(`✅ Verified @${telegramUsername}`);
-    } else {
-      const errorMsg = verifyResult?.error || "Verification failed";
-      await apiCall("sendMessage", {
-        chat_id: msg.chat.id,
-        text: `❌ ${errorMsg}\n\nMake sure you entered the exact code shown on Telefavor.`,
-      });
-      console.log(`❌ Failed for @${telegramUsername}: ${errorMsg}`);
     }
   }
 }
@@ -132,6 +141,11 @@ async function main() {
   } else {
     console.error("❌ Failed to connect to Telegram API. Check BOT_TOKEN.");
     process.exit(1);
+  }
+
+  if (!process.env.VERIFY_URL || VERIFY_URL.includes("localhost")) {
+    console.warn("⚠️  VERIFY_URL is set to localhost. Set it to your Vercel app URL in production:");
+    console.warn("   e.g. https://telefavor.vercel.app/api/verification/verify");
   }
 
   startHealthServer();
