@@ -76,9 +76,16 @@ async function poll() {
     const msg = update.message;
     if (!msg?.text) continue;
 
-    const text = msg.text.trim().toUpperCase();
-    const tfMatch = text.match(/^TF-[A-Z0-9]{6}$/);
-    if (!tfMatch) continue;
+    const text = msg.text.trim();
+    if (text === "/start") {
+      await apiCall("sendMessage", {
+        chat_id: msg.chat.id,
+        text: `🔐 Enter your 6-digit verification code from Telefavor.`,
+      });
+      continue;
+    }
+    const codeMatch = text.match(/^\d{6}$/);
+    if (!codeMatch) continue;
 
     const from = msg.from;
     const telegramId = from.id;

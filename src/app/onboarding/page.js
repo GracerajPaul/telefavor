@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { updateUser } from "../../services/database";
+import { signOut } from "../../services/auth";
 import { useAuth } from "../../context/AuthContext";
 import VerificationStatus from "../../components/VerificationStatus";
 
@@ -16,6 +17,10 @@ function OnboardingContent() {
   const redirected = useRef(false);
 
   const needsVerify = searchParams.get("verify") === "1" || profile?.has_onboarded;
+
+  useEffect(() => {
+    if (profile?.telegram_username) setUsername(profile.telegram_username);
+  }, [profile?.telegram_username]);
 
   useEffect(() => {
     if (loading || redirected.current) return;
@@ -58,7 +63,10 @@ function OnboardingContent() {
           <img src="/logo.jpeg" alt="Telefavor" className="w-9 h-9 rounded-lg object-cover" />
           <span className="text-[18px] font-bold text-white">Telefavor</span>
         </div>
-        <button onClick={() => router.push("/")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Back to Home</button>
+        <div className="flex items-center gap-3">
+          <button onClick={() => signOut()} className="text-[14px] text-[#94A3B8] hover:text-[#EF4444] transition-colors">Sign Out</button>
+          <button onClick={() => router.push("/")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Back to Home</button>
+        </div>
       </nav>
 
       {/* Onboarding Section */}
@@ -123,6 +131,7 @@ function OnboardingContent() {
                 </h1>
                 <p className="text-[#94A3B8] text-[16px] max-w-md leading-relaxed mb-8">
                   Message the code below to <a href="https://t.me/TelefavorVerificationBot" target="_blank" rel="noopener noreferrer" className="text-[#06B6D4] hover:underline font-semibold">@TelefavorVerificationBot</a> on Telegram to prove you own <strong className="text-white">@{profile?.telegram_username}</strong>.
+                  <button onClick={() => setStep("username")} className="ml-2 text-[12px] text-[#94A3B8] hover:text-[#06B6D4] underline transition-colors">Edit</button>
                 </p>
                 <div className="bg-[#151230] rounded-2xl border border-[#1E1B3A] p-6 max-w-sm">
                   <VerificationStatus onVerified={handleVerified} autoGenerate />

@@ -11,7 +11,7 @@ export async function POST(req) {
     const { data: record, error: fetchError } = await supabase
       .from("verification_codes")
       .select("*")
-      .eq("code", code.toUpperCase())
+      .eq("code", code)
       .maybeSingle();
 
     if (fetchError) throw fetchError;
