@@ -1,0 +1,11 @@
+services:
+  - type: worker
+    name: telefavor-bot
+    env: node
+    buildCommand: npm install
+    startCommand: node telegram-bot.cjs
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: VERIFY_URL
+        value: https://your-app.onrender.com/api/verification/verify
