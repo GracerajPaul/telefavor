@@ -14,6 +14,10 @@ function OnboardingContent() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [step, setStep] = useState("username");
+  const [premiumCode, setPremiumCode] = useState("");
+  const [premiumOpen, setPremiumOpen] = useState(false);
+  const [premiumSaving, setPremiumSaving] = useState(false);
+  const [premiumError, setPremiumError] = useState("");
   const redirected = useRef(false);
 
   const needsVerify = searchParams.get("verify") === "1" || profile?.has_onboarded;
@@ -40,6 +44,30 @@ function OnboardingContent() {
       await refreshProfile();
       setStep("verify");
     } catch { setError("Failed to save. Try again."); } finally { setSaving(false); }
+  };
+
+  const handlePremiumVerify = async () => {
+    const cleaned = premiumCode.trim();
+    if (!cleaned) { setPremiumError("Enter your premium code"); return; }
+    setPremiumSaving(true);
+    setPremiumError("");
+    try {
+      const res = await fetch("/api/premium/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: fbUser.id, code: cleaned }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || "Invalid code");
+      await updateUser(fbUser.id, { has_onboarded: true });
+      await refreshProfile();
+      redirected.current = true;
+      router.push("/explore");
+    } catch (err) {
+      setPremiumError(err.message);
+    } finally {
+      setPremiumSaving(false);
+    }
   };
 
   const handleVerified = () => {
@@ -116,6 +144,67 @@ function OnboardingContent() {
                       )}
                     </button>
                   </form>
+
+                  {/* Divider */}
+                  <div className="flex items-center gap-3 mt-6 mb-5 max-w-sm">
+                    <div className="flex-1 h-px bg-[#1E1B3A]" />
+                    <span className="text-[11px] text-[#5A5A7A] font-medium uppercase tracking-wider">or</span>
+                    <div className="flex-1 h-px bg-[#1E1B3A]" />
+                  </div>
+
+                  {/* Premium */}
+                  <div className="max-w-sm">
+                    <button
+                      onClick={() => setPremiumOpen(!premiumOpen)}
+                      className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-[#151230] border border-[#1E1B3A] hover:border-[#F6C000]/40 transition-all"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#F6C000" stroke="#F6C000" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className="text-[13px] text-white font-medium">Premium Member</span>
+                      </div>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`transition-transform duration-200 ${premiumOpen ? "rotate-180" : ""}`}>
+                        <path d="M6 9L12 15L18 9" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </button>
+
+                    {premiumOpen && (
+                      <div className="mt-3 p-4 rounded-xl bg-[#151230]/60 border border-[#1E1B3A] animate-slideDown">
+                        <p className="text-[12px] text-[#94A3B8] mb-3 leading-relaxed">
+                          Enter your premium access code to skip Telegram verification. You can set your username later in your profile.
+                        </p>
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            value={premiumCode}
+                            onChange={(e) => setPremiumCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                            placeholder="Enter 6-digit code"
+                            className="w-full bg-[#0D0B1A] text-white text-[16px] text-center tracking-[8px] rounded-xl px-4 py-3 outline-none border border-transparent focus:border-[#F6C000] transition-all duration-200 placeholder:tracking-normal"
+                            maxLength={6}
+                            autoFocus
+                          />
+                          {premiumError && <p className="text-[#EF4444] text-[12px]">{premiumError}</p>}
+                          <button
+                            onClick={handlePremiumVerify}
+                            disabled={premiumSaving || premiumCode.length !== 6}
+                            className="ripple w-full py-3 rounded-xl bg-gradient-to-r from-[#F6C000] to-[#E5A500] text-[#0D0B1A] text-[14px] font-bold disabled:opacity-40 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+                          >
+                            {premiumSaving ? (
+                              <div className="w-5 h-5 border-2 border-[#0D0B1A]/30 border-t-[#0D0B1A] rounded-full animate-spin" />
+                            ) : (
+                              <>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                Verify Premium
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </>
             )}

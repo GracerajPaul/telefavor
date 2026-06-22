@@ -64,6 +64,7 @@ CREATE INDEX IF NOT EXISTS idx_ratings_rated ON ratings(rated_user_id);
 ALTER TABLE users ADD COLUMN IF NOT EXISTS description TEXT DEFAULT '';
 ALTER TABLE users ADD COLUMN IF NOT EXISTS telegram_id BIGINT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS telegram_verified BOOLEAN DEFAULT FALSE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS premium_verified BOOLEAN DEFAULT FALSE;
 
 -- ============================================================
 -- 4. VERIFICATION CODES

@@ -181,13 +181,22 @@ export default function MyProfilePage() {
                 Verified Telegram
               </span>
             </div>
+          ) : profile.premium_verified ? (
+            <div className="flex items-center justify-between px-3 py-3 rounded-xl cursor-default">
+              <span className="text-[14px] text-[#F6C000] flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#F6C000" stroke="#F6C000" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Premium Member
+              </span>
+            </div>
           ) : (
             <div className="px-3 py-2">
               <VerificationStatus />
             </div>
           )}
-          <button onClick={() => { setUsernameInput(profile.telegram_username || ""); setEditingUsername(true); }} disabled={profile.telegram_verified} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-[#0D0B1A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-            <span className="text-[14px] text-white">{profile.telegram_verified ? "Username Locked" : "Edit Username"}</span>
+          <button onClick={() => { setUsernameInput(profile.telegram_username || ""); setEditingUsername(true); }} disabled={!!profile.telegram_verified && !profile.premium_verified} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-[#0D0B1A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            <span className="text-[14px] text-white">{profile.telegram_verified && !profile.premium_verified ? "Username Locked" : "Edit Username"}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/></svg>
           </button>
           <button onClick={handleSignOut} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-[#0D0B1A] transition-colors">
