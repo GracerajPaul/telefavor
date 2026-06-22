@@ -11,7 +11,6 @@ export default function MainLayout({ children }) {
   const redirecting = useRef(false);
 
   useEffect(() => {
-    if (loading || profileLoading) return;
     if (!isLoggedIn && !redirecting.current) {
       redirecting.current = true;
       router.replace("/");
@@ -28,17 +27,7 @@ export default function MainLayout({ children }) {
       return;
     }
     redirecting.current = false;
-  }, [loading, profileLoading, isLoggedIn, profile, router, pathname]);
-
-  if (loading || profileLoading) {
-    return (
-      <div className="min-h-screen bg-[#0D0B1A] flex items-center justify-center">
-        <div className="spinner" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) return null;
+  }, [isLoggedIn, profile, router, pathname]);
 
   return (
     <div className="min-h-screen bg-[#0D0B1A] bg-grid">
