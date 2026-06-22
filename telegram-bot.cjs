@@ -145,7 +145,7 @@ function startHealthServer() {
       res.end(JSON.stringify({ status: "ok", bot: "TelefavorVerificationBot" }));
     } else {
       res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "not_found" }));
+      res.end(JSON.stringify({ error: "VERIFY_URL points to this bot instead of the Vercel app — check Render dashboard env vars" }));
     }
   });
   server.listen(PORT, () => {
