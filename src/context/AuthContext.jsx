@@ -44,6 +44,15 @@ export function AuthProvider({ children }) {
           setUser(session.user);
           const p = await loadProfile(session.user.id);
           setProfile(p);
+        } else if (typeof window !== "undefined") {
+          const premiumId = localStorage.getItem("premium_user_id");
+          if (premiumId) {
+            const p = await loadProfile(premiumId);
+            if (p) {
+              setUser({ id: premiumId, isPremium: true });
+              setProfile(p);
+            }
+          }
         }
       } catch {
         // Auth not configured yet
@@ -88,7 +97,7 @@ export function AuthProvider({ children }) {
         loading,
         profileLoading,
         refreshProfile,
-        isAuthenticated: !!user && !!profile?.has_onboarded,
+        isAuthenticated: (!!user && !!profile?.has_onboarded),
         isLoggedIn: !!user,
       }}
     >

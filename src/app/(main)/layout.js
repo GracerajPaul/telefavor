@@ -22,7 +22,7 @@ export default function MainLayout({ children }) {
       router.replace("/onboarding");
       return;
     }
-    if (profile && profile.has_onboarded && !profile.telegram_verified && pathname !== "/onboarding" && !redirecting.current) {
+    if (profile && profile.has_onboarded && !profile.telegram_verified && !profile.premium_verified && pathname !== "/onboarding" && !redirecting.current) {
       redirecting.current = true;
       router.replace("/onboarding?verify=1");
       return;

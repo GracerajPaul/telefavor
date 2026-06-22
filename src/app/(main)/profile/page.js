@@ -35,7 +35,14 @@ export default function MyProfilePage() {
     fetch();
   }, [fbUser]);
 
-  const handleSignOut = async () => { await signOut(); router.push("/"); };
+  const handleSignOut = async () => {
+    if (fbUser?.isPremium) {
+      localStorage.removeItem("premium_user_id");
+      window.location.href = "/";
+    } else {
+      await signOut();
+    }
+  };
 
   const handleSaveUsername = async () => {
     const cleaned = usernameInput.replace(/^@/, "").trim();

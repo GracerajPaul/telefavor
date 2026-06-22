@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "../services/auth";
+import { updateUser } from "../services/database";
 import { useAuth } from "../context/AuthContext";
 
 const features = [
@@ -39,16 +40,33 @@ const features = [
 
 export default function LandingPage() {
   const router = useRouter();
-  const { user, profile, loading, profileLoading, isAuthenticated, isLoggedIn } = useAuth();
+  const { user, profile, loading, profileLoading, isAuthenticated, isLoggedIn, refreshProfile } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [premiumOpen, setPremiumOpen] = useState(false);
+  const [premiumCode, setPremiumCode] = useState("");
+  const [premiumSaving, setPremiumSaving] = useState(false);
+  const [premiumError, setPremiumError] = useState("");
+  const [premiumSuccess, setPremiumSuccess] = useState(false);
   const redirected = useRef(false);
+  const premiumRedirected = useRef(false);
+
+  useEffect(() => {
+    if (premiumSuccess && !premiumRedirected.current) {
+      premiumRedirected.current = true;
+      const t = setTimeout(() => window.location.href = "/explore", 1200);
+      return () => clearTimeout(t);
+    }
+  }, [premiumSuccess]);
 
   useEffect(() => {
     if (redirected.current) return;
     if (isAuthenticated) { redirected.current = true; router.replace("/explore"); }
-    else if (isLoggedIn && profile && !profile.has_onboarded) { redirected.current = true; router.replace("/onboarding"); }
+    else if (isLoggedIn && profile && !profile.has_onboarded) {
+      redirected.current = true;
+      router.replace("/onboarding");
+    }
   }, [isAuthenticated, isLoggedIn, profile, router]);
 
   const handleGoogleSignIn = async () => {
@@ -124,6 +142,21 @@ export default function LandingPage() {
                   </>
                 )}
               </button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3 mt-5 mb-4">
+                <div className="flex-1 h-px bg-[#1E1B3A]" />
+                <span className="text-[11px] text-[#5A5A7A] font-medium uppercase tracking-wider">or</span>
+                <div className="flex-1 h-px bg-[#1E1B3A]" />
+              </div>
+
+              {/* Premium Access Button */}
+              <button onClick={() => setPremiumOpen(true)} className="ripple w-full py-3 rounded-xl bg-gradient-to-r from-[#F6C000] to-[#E5A500] text-[#0D0B1A] text-[14px] font-bold flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all duration-200 hover:shadow-lg hover:shadow-[#F6C000]/30">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Premium Access
+              </button>
             </div>
           </div>
 
@@ -190,6 +223,80 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Premium Access Modal */}
+      {premiumOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 animate-fadeIn" onClick={() => { setPremiumOpen(false); setPremiumCode(""); setPremiumError(""); setPremiumSuccess(false); }} />
+          <div className="relative w-full max-w-sm bg-[#151230] rounded-2xl p-6 animate-scaleIn border border-[#1E1B3A] shadow-2xl">
+            {premiumSuccess ? (
+              <div className="text-center py-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#F6C000] to-[#E5A500] flex items-center justify-center mx-auto mb-4">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#0D0B1A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <h2 className="text-[18px] font-bold text-white mb-2">Premium Access Granted!</h2>
+                <p className="text-[13px] text-[#94A3B8] leading-relaxed">Redirecting you to the app...</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F6C000] to-[#E5A500] flex items-center justify-center flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#0D0B1A" stroke="#0D0B1A" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-[17px] font-semibold text-white">Premium Access</h2>
+                    <p className="text-[12px] text-[#94A3B8]">Enter your 6-digit premium code</p>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  value={premiumCode}
+                  onChange={(e) => setPremiumCode(e.target.value.replace((/\D/g), "").slice(0, 6))}
+                  placeholder="000000"
+                  className="w-full bg-[#0D0B1A] text-white text-[24px] text-center tracking-[10px] rounded-xl px-4 py-4 outline-none border border-transparent focus:border-[#F6C000] transition-all duration-200 font-mono placeholder:text-[#5A5A7A]"
+                  maxLength={6}
+                  autoFocus
+                />
+                {premiumError && <p className="text-[#EF4444] text-[12px] mt-2 text-center">{premiumError}</p>}
+                <div className="flex gap-3 mt-4">
+                  <button onClick={() => { setPremiumOpen(false); setPremiumCode(""); setPremiumError(""); }} className="flex-1 py-3 rounded-xl bg-[#1A1A30] text-[#94A3B8] text-[14px] font-medium hover:bg-[#1D1940] transition-colors active:scale-95">Cancel</button>
+                  <button
+                    onClick={async () => {
+                      setPremiumSaving(true);
+                      setPremiumError("");
+                      try {
+                        const res = await fetch("/api/premium/verify", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ code: premiumCode }),
+                        });
+                        const data = await res.json();
+                        if (!res.ok || data.error) throw new Error(data.error || "Invalid code");
+                        localStorage.setItem("premium_user_id", data.userId);
+                        setPremiumSaving(false);
+                        setPremiumSuccess(true);
+                      } catch (err) {
+                        setPremiumError(err.message);
+                        setPremiumSaving(false);
+                      }
+                    }}
+                    disabled={premiumSaving || premiumCode.length !== 6}
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#F6C000] to-[#E5A500] text-[#0D0B1A] text-[14px] font-bold disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2"
+                  >
+                    {premiumSaving ? (
+                      <div className="w-5 h-5 border-2 border-[#0D0B1A]/30 border-t-[#0D0B1A] rounded-full animate-spin" />
+                    ) : (
+                      <span>Verify Code</span>
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
