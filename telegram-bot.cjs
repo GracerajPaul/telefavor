@@ -56,11 +56,11 @@ function callVerifyApi(code, telegramId, telegramUsername) {
     const mod = url.protocol === "https:" ? https : http;
     const options = {
       hostname: url.hostname,
-      port: url.port,
-      path: url.pathname,
       method: "POST",
       headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(data) },
     };
+    if (url.port) options.port = url.port;
+    options.path = url.pathname + url.search;
     const req = mod.request(options, (res) => {
       let body = "";
       res.on("data", (chunk) => (body += chunk));
@@ -110,13 +110,21 @@ async function poll() {
         });
         console.log(`✅ Verified @${telegramUsername}`);
       } else {
-        const errorMsg = verifyResult?.error || "Verification failed";
-        await apiCall("sendMessage", {
-          chat_id: msg.chat.id,
-          text: `❌ ${errorMsg}\n\nMake sure you entered the exact code shown on Telefavor.`,
-        });
-        console.log(`❌ Failed for @${telegramUsername}: ${errorMsg}`);
-        if (verifyResult) console.log(`🔍 Raw response:`, JSON.stringify(verifyResult));
+        const errorMsg = verifyResult?.error;
+        if (errorMsg) {
+          await apiCall("sendMessage", {
+            chat_id: msg.chat.id,
+            text: `❌ ${errorMsg}\n\nMake sure you entered the exact code shown on Telefavor.`,
+          });
+          console.log(`❌ Failed for @${telegramUsername}: ${errorMsg}`);
+        } else {
+          const raw = verifyResult ? JSON.stringify(verifyResult) : "null (non-JSON response)";
+          console.log(`🔴 Unexpected API response for @${telegramUsername}: ${raw}`);
+          await apiCall("sendMessage", {
+            chat_id: msg.chat.id,
+            text: `❌ Verification failed — unexpected API response.\n\nDebug: ${raw}\n\nCheck VERIFY_URL in Render dashboard.`,
+          });
+        }
       }
     } catch (err) {
       console.error(`🔴 API call error for @${telegramUsername}:`, err.message);
