@@ -60,40 +60,40 @@ export default function TermsPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-bg-dark bg-grid">
-      <nav className="flex items-center justify-between px-4 md:px-8 py-4 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-bg-dark">
+      <nav className="flex items-center justify-between px-4 md:px-[141px] py-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg overflow-hidden ring-1 ring-white/10">
+          <div className="w-7 h-7 rounded overflow-hidden ring-1 ring-white/10">
             <img src="/logo.jpeg" alt="" className="w-full h-full object-cover" />
           </div>
-          <span className="text-[17px] font-bold text-text">Telefavor</span>
+          <span className="text-[15px] font-semibold text-text tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>Telefavor</span>
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={() => router.push("/features")} className="px-3 py-1.5 rounded-lg text-[13px] text-text-muted hover:text-text-secondary hover:bg-bg-elevated transition-all">Features</button>
-          <button onClick={() => router.push("/community")} className="px-3 py-1.5 rounded-lg text-[13px] text-text-muted hover:text-text-secondary hover:bg-bg-elevated transition-all">Community</button>
+          <button onClick={() => router.push("/features")} className="px-3 py-1.5 rounded-lg text-[12px] text-text-muted hover:text-text-secondary hover:bg-bg-hover transition-colors">Features</button>
+          <button onClick={() => router.push("/community")} className="px-3 py-1.5 rounded-lg text-[12px] text-text-muted hover:text-text-secondary hover:bg-bg-hover transition-colors">Community</button>
         </div>
       </nav>
 
-      <section className="px-4 md:px-8 py-16 md:py-24 max-w-4xl mx-auto animate-fadeIn">
+      <section className="px-4 md:px-[141px] pt-20 md:pt-28 animate-fadeIn" style={{ marginBottom: "250px" }}>
         <div className="text-center mb-12">
-          <h1 className="text-[28px] md:text-[36px] font-bold text-text mb-4">Terms & Conditions</h1>
-          <p className="text-text-secondary text-[14px]">Last updated: June 2026</p>
+          <h1 className="text-[28px] md:text-[36px] font-light text-text mb-3" style={{ fontFamily: "var(--font-heading)" }}>Terms & Conditions</h1>
+          <p className="text-text-secondary text-[13px]">Last updated: June 2026</p>
         </div>
 
-        <div className="bg-bg-card rounded-2xl border border-border p-6 md:p-10 animate-slideUp space-y-8">
+        <div className="bg-bg-card border border-border rounded-xl p-6 md:p-10 space-y-8 max-w-3xl mx-auto">
           {sections.map((s, i) => (
-            <div key={i} className="animate-fadeIn" style={{ animationDelay: `${i * 60}ms` }}>
-              <h2 className="text-[17px] font-semibold text-text mb-3">{s.title}</h2>
+            <div key={i} className="animate-fadeIn" style={{ animationDelay: `${i * 40}ms` }}>
+              <h2 className="text-[15px] font-semibold text-text mb-3">{s.title}</h2>
               {s.content.split("\n").map((line, j) => (
-                <p key={j} className="text-[14px] text-text-secondary leading-relaxed mb-2 last:mb-0 whitespace-pre-line">{line}</p>
+                <p key={j} className="text-[13px] text-text-secondary leading-relaxed mb-2 last:mb-0 whitespace-pre-line">{line}</p>
               ))}
             </div>
           ))}
         </div>
       </section>
 
-      <footer className="border-t border-border px-4 md:px-8 py-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[13px] text-text-muted">
+      <footer className="px-4 md:px-[141px] py-6 border-t border-border">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-[12px] text-text-muted">
           <p>Telefavor — Safe Referral Exchanges on Telegram</p>
           <div className="flex items-center gap-4">
             <button onClick={() => router.push("/features")} className="hover:text-text-secondary transition-colors">Features</button>

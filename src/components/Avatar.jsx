@@ -1,26 +1,49 @@
+"use client";
+
+const AVATAR_COLORS = [
+  "#0842A0", "#1a5bb5", "#2d74c9", "#408ddd",
+  "#0d6b3e", "#1a8c54", "#f59e0b", "#d97706",
+  "#9333ea", "#7c3aed", "#dc2626", "#2563eb",
+];
+
+function hashColor(name) {
+  if (!name) return AVATAR_COLORS[0];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
 export default function Avatar({ src, name, size = 40, onClick }) {
-  const colors = [
-    "#06B6D4", "#0EA5E9", "#22C55E", "#F59E0B",
-    "#EF4444", "#8B5CF6", "#EC4899",
-  ];
-  const colorIndex = (name || "").length % colors.length;
-  const bg = colors[colorIndex];
-  const initial = (name || "?").charAt(0).toUpperCase();
-  const Component = onClick ? "button" : "div";
+  const initials = (name || "?")
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  const bgColor = hashColor(name);
+
+  if (src) {
+    return (
+      <button
+        onClick={onClick}
+        disabled={!onClick}
+        className={`rounded-full overflow-hidden border border-border flex-shrink-0 ${onClick ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-default"}`}
+        style={{ width: size, height: size }}
+      >
+        <img src={src} alt={name || ""} className="w-full h-full object-cover" />
+      </button>
+    );
+  }
 
   return (
-    <Component
+    <button
       onClick={onClick}
-      className="rounded-full overflow-hidden flex-shrink-0 ring-2 ring-border hover:ring-primary/30 transition-all duration-200 active:scale-95"
-      style={{ width: size, height: size }}
+      disabled={!onClick}
+      className={`rounded-full flex items-center justify-center font-medium text-white flex-shrink-0 ${onClick ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-default"}`}
+      style={{ width: size, height: size, fontSize: size * 0.4, backgroundColor: bgColor }}
     >
-      {src ? (
-        <img src={src} alt={name || ""} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center text-white font-semibold text-[15px] select-none" style={{ background: bg }}>
-          {initial}
-        </div>
-      )}
-    </Component>
+      {initials}
+    </button>
   );
 }

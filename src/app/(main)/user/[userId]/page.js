@@ -54,21 +54,21 @@ export default function PublicProfilePage() {
   const totalRatings = (userData.green_ratings || 0) + (userData.red_ratings || 0);
 
   return (
-    <div className="animate-fadeIn">
-      <div className="flex items-center gap-3 mb-5">
-        <button onClick={() => router.push("/explore")} className="w-7 h-7 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-text hover:bg-bg-elevated transition-all flex-shrink-0">
+    <div className="animate-fadeIn" style={{ marginBottom: "250px" }}>
+      <div className="flex items-center gap-3 mb-8">
+        <button onClick={() => router.push("/explore")} className="w-7 h-7 rounded bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-text hover:bg-bg-hover transition-colors flex-shrink-0">
           <Icon name="arrow-left" size={12} />
         </button>
-        <h1 className="text-[20px] font-bold text-text">Public Profile</h1>
+        <h1 className="text-[20px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>Public Profile</h1>
       </div>
 
-      <div className="bg-bg-card rounded-xl border border-border p-4 md:p-5 mb-4">
+      <div className="bg-bg-card border border-border rounded-xl p-5 mb-4">
         <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex items-start gap-4 sm:flex-col sm:items-center">
-            <Avatar src={userData.photo_url} name={userData.display_name} size={48} />
+          <div className="sm:flex sm:flex-col sm:items-center">
+            <Avatar src={userData.photo_url} name={userData.display_name} size={44} />
             {!isSelf && (
-              <button onClick={handleContact} className="sm:hidden flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-soft text-primary text-[12px] font-semibold hover:bg-primary/25 transition-colors active:scale-95">
-                <Icon name="send" size={12} />
+              <button onClick={handleContact} className="sm:hidden flex items-center gap-1 px-3 py-1.5 rounded bg-primary-soft text-primary text-[11px] font-medium hover:bg-primary/20 transition-colors mt-2">
+                <Icon name="send" size={11} />
                 Contact
               </button>
             )}
@@ -76,15 +76,15 @@ export default function PublicProfilePage() {
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="text-[18px] md:text-[20px] font-bold text-text truncate">{userData.display_name || "Unknown"}</h2>
+                <h2 className="text-[17px] font-semibold text-text truncate">{userData.display_name || "Unknown"}</h2>
                 <div className="flex flex-wrap items-center gap-2 mt-0.5">
-                  <a href={`https://t.me/${userData.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-primary text-[13px] md:text-[14px] hover:underline font-medium truncate">@{userData.telegram_username}</a>
+                  <a href={`https://t.me/${userData.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-link text-[12px] md:text-[13px] hover:text-link-hover font-medium truncate">@{userData.telegram_username}</a>
                   {userData.telegram_verified && (
-                    <span className="text-[11px] text-green font-medium">✓ Verified</span>
+                    <span className="text-[10px] text-green font-medium">✓ Verified</span>
                   )}
                   {!isSelf && (
-                    <button onClick={handleContact} className="hidden sm:flex items-center gap-1 px-3 py-1 rounded-full bg-primary-soft text-primary text-[12px] font-semibold hover:bg-primary/25 transition-colors active:scale-95">
-                      <Icon name="send" size={12} />
+                    <button onClick={handleContact} className="hidden sm:flex items-center gap-1 px-3 py-1 rounded bg-primary-soft text-primary text-[11px] font-medium hover:bg-primary/20 transition-colors">
+                      <Icon name="send" size={11} />
                       Contact
                     </button>
                   )}
@@ -93,61 +93,61 @@ export default function PublicProfilePage() {
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <Badge level={null} score={userData.trust_score} ratingsCount={totalRatings} />
                 {totalRatings > 0 ? (
-                  <span className="text-[12px] text-text-muted">{userData.green_ratings || 0}/{totalRatings}</span>
+                  <span className="text-[11px] text-text-muted">{userData.green_ratings || 0}/{totalRatings}</span>
                 ) : (
-                  <span className="text-[12px] text-text-tertiary">No ratings</span>
+                  <span className="text-[11px] text-text-tertiary">No ratings</span>
                 )}
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[12px] text-text-muted">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[11px] text-text-muted">
               <span>Joined {userData.created_at ? new Date(userData.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "recently"}</span>
               <span className="text-border">·</span>
               <span>{listings.length} listing{listings.length !== 1 ? "s" : ""}</span>
             </div>
             <div className="flex gap-2 mt-2 flex-wrap">
-              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-text">{userData.total_listings_posted || 0}</p>
-                <p className="text-[9px] text-text-muted">Posts</p>
+              <div className="text-center px-2 py-1 rounded bg-bg-inset min-w-[48px]">
+                <p className="text-[13px] font-semibold text-text">{userData.total_listings_posted || 0}</p>
+                <p className="text-[8px] text-text-muted">Posts</p>
               </div>
-              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-green">{userData.green_ratings || 0}</p>
-                <p className="text-[9px] text-text-muted">Green</p>
+              <div className="text-center px-2 py-1 rounded bg-bg-inset min-w-[48px]">
+                <p className="text-[13px] font-semibold text-green">{userData.green_ratings || 0}</p>
+                <p className="text-[8px] text-text-muted">Green</p>
               </div>
-              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-red">{userData.red_ratings || 0}</p>
-                <p className="text-[9px] text-text-muted">Red</p>
+              <div className="text-center px-2 py-1 rounded bg-bg-inset min-w-[48px]">
+                <p className="text-[13px] font-semibold text-red">{userData.red_ratings || 0}</p>
+                <p className="text-[8px] text-text-muted">Red</p>
               </div>
             </div>
             {userData.description && (
-              <p className="text-[13px] text-text-secondary mt-3 pt-3 border-t border-border leading-relaxed">{userData.description}</p>
+              <p className="text-[12px] text-text-secondary mt-3 pt-3 border-t border-border leading-relaxed">{userData.description}</p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="bg-bg-card rounded-xl border border-border p-4 mb-4">
-        <h3 className="text-[11px] text-text-muted font-medium uppercase tracking-wider mb-3">Trust Score</h3>
+      <div className="bg-bg-card border border-border rounded-xl p-5 mb-4">
+        <h3 className="text-[10px] text-text-muted font-medium uppercase tracking-wider mb-3">Trust Score</h3>
         <TrustScoreSection userData={userData} size="large" />
       </div>
 
-      <div className="bg-bg-card rounded-xl border border-border p-4">
-        <h3 className="text-[11px] text-text-muted font-medium uppercase tracking-wider mb-3">Listings ({listings.length})</h3>
+      <div className="bg-bg-card border border-border rounded-xl p-5">
+        <h3 className="text-[10px] text-text-muted font-medium uppercase tracking-wider mb-3">Listings ({listings.length})</h3>
         {listings.length === 0 ? (
-          <p className="text-[13px] text-text-tertiary italic">No listings yet</p>
+          <p className="text-[12px] text-text-tertiary italic">No listings yet</p>
         ) : (
           <div className="space-y-2">
             {listings.map((l) => (
-              <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-bg-inset border border-border hover:border-primary/30 transition-colors">
+              <div key={l.id} className="flex items-center justify-between p-3 rounded-lg bg-bg-inset border border-border">
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] text-text font-medium">{l.title}</p>
-                  {l.message && <p className="text-[12px] text-text-secondary mt-1 leading-relaxed">{l.message}</p>}
-                  <div className="flex items-center gap-3 mt-1.5 text-[11px] text-text-tertiary">
+                  <p className="text-[13px] text-text font-medium">{l.title}</p>
+                  {l.message && <p className="text-[11px] text-text-secondary mt-1 leading-relaxed">{l.message}</p>}
+                  <div className="flex items-center gap-3 mt-1.5 text-[10px] text-text-tertiary">
                     <span>{new Date(l.posted_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                     <span className="text-border">|</span>
                     <span>@{l.telegram_username}</span>
                   </div>
                 </div>
-                <span className={`text-[11px] px-2.5 py-1 rounded-full font-medium ml-3 flex-shrink-0 ${l.is_active ? "bg-green/15 text-green" : "bg-text-muted/15 text-text-muted"}`}>{l.is_active ? "Active" : "Expired"}</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded font-medium ml-3 flex-shrink-0 ${l.is_active ? "bg-green/10 text-green" : "bg-text-muted/10 text-text-muted"}`}>{l.is_active ? "Active" : "Expired"}</span>
               </div>
             ))}
           </div>

@@ -1,46 +1,37 @@
 "use client";
-import { useState, useEffect, createContext, useContext, useCallback } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
+import Icon from "./Icon";
 
 const ToastContext = createContext(null);
+export const useToast = () => useContext(ToastContext);
 
-export function ToastProvider({ children }) {
+export default function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback((message, type = "success") => {
-    const id = Date.now() + Math.random();
+    const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3000);
   }, []);
 
   return (
     <ToastContext.Provider value={addToast}>
       {children}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-2 pointer-events-none w-full max-w-sm px-4">
+      <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 items-center pointer-events-none">
         {toasts.map((t) => (
-          <ToastItem key={t.id} message={t.message} type={t.type} onDone={() => setToasts((prev) => prev.filter((x) => x.id !== t.id))} />
+          <div
+            key={t.id}
+            className={`pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-lg border text-[13px] font-medium animate-fadeIn ${
+              t.type === "error"
+                ? "bg-bg-dark border-red/30 text-red"
+                : "bg-bg-dark border-border text-text"
+            }`}
+          >
+            <Icon name={t.type === "error" ? "x" : "check"} size={14} className={t.type === "error" ? "text-red" : "text-green"} />
+            {t.message}
+          </div>
         ))}
       </div>
     </ToastContext.Provider>
   );
-}
-
-function ToastItem({ message, type, onDone }) {
-  useEffect(() => {
-    const t = setTimeout(onDone, 2500);
-    return () => clearTimeout(t);
-  }, [onDone]);
-
-  return (
-    <div className="pointer-events-auto w-full animate-slideUp" style={{ animationDuration: "0.3s" }}>
-      <div className="glass rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl shadow-black/20">
-        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${type === "success" ? "bg-green" : "bg-red"}`} />
-        <p className="text-[13px] text-text leading-snug flex-1">{message}</p>
-      </div>
-    </div>
-  );
-}
-
-export function useToast() {
-  const ctx = useContext(ToastContext);
-  if (!ctx) return () => {};
-  return ctx;
 }

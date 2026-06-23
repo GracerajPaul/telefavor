@@ -3,9 +3,9 @@ import { useRouter } from "next/navigation";
 import Icon from "../../components/Icon";
 
 const features = [
-  { icon: "refresh", title: "Referral Exchange", desc: "Swap Telegram and TON referrals — channel subs, bot invites, game referrals, group joins, and more. Post what you need, help someone else, and grow together." },
+  { icon: "refresh", title: "Referral Exchange", desc: "Swap Telegram and TON referrals — channel subs, bot invites, game referrals, group joins, and more." },
   { icon: "star", title: "Trust Score System", desc: "Every user has a trust score based on successful swaps. Green ratings boost your score, red ratings protect the community." },
-  { icon: "users", title: "Public Profiles", desc: "View anyone's trust history, ratings, and listing activity before you swap. Make informed decisions." },
+  { icon: "users", title: "Public Profiles", desc: "View anyone's trust history, ratings, and listing activity before you swap." },
   { icon: "check", title: "Verified Reviews", desc: "Each swap generates a verifiable review. One rating per listing ensures honest, actionable feedback." },
   { icon: "filter", title: "Category Filters", desc: "Filter by type — Telegram Channel, Telegram Bot, Telegram Group, Telegram Mini App, TON, and more." },
   { icon: "send", title: "Telegram Integration", desc: "Direct Telegram contact with one tap. No phone numbers required — just your @username." },
@@ -31,88 +31,88 @@ export default function FeaturesPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-bg-dark bg-grid">
-      <nav className="flex items-center justify-between px-4 md:px-8 py-4 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-bg-dark">
+      <nav className="flex items-center justify-between px-4 md:px-[141px] py-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg overflow-hidden ring-1 ring-white/10">
+          <div className="w-7 h-7 rounded overflow-hidden ring-1 ring-white/10">
             <img src="/logo.jpeg" alt="" className="w-full h-full object-cover" />
           </div>
-          <span className="text-[17px] font-bold text-text">Telefavor</span>
+          <span className="text-[15px] font-semibold text-text tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>Telefavor</span>
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={() => router.push("/community")} className="px-3 py-1.5 rounded-lg text-[13px] text-text-muted hover:text-text-secondary hover:bg-bg-elevated transition-all">Community</button>
-          <button onClick={() => router.push("/terms")} className="px-3 py-1.5 rounded-lg text-[13px] text-text-muted hover:text-text-secondary hover:bg-bg-elevated transition-all">Terms</button>
+          <button onClick={() => router.push("/community")} className="px-3 py-1.5 rounded-lg text-[12px] text-text-muted hover:text-text-secondary hover:bg-bg-hover transition-colors">Community</button>
+          <button onClick={() => router.push("/terms")} className="px-3 py-1.5 rounded-lg text-[12px] text-text-muted hover:text-text-secondary hover:bg-bg-hover transition-colors">Terms</button>
         </div>
       </nav>
 
-      <section className="px-4 md:px-8 py-16 md:py-24 max-w-5xl mx-auto">
+      <section className="px-4 md:px-[141px] pt-20 md:pt-28" style={{ marginBottom: "250px" }}>
         <div className="text-center mb-16 animate-fadeIn">
-          <div className="w-16 h-16 rounded-2xl overflow-hidden mx-auto mb-6 ring-1 ring-white/10">
+          <div className="w-14 h-14 rounded overflow-hidden mx-auto mb-6 ring-1 ring-white/10">
             <img src="/logo.jpeg" alt="Telefavor" className="w-full h-full object-cover" />
           </div>
-          <h1 className="text-[28px] md:text-[44px] font-bold text-text mb-4">
-            Everything You Need for <span className="text-primary">Safe Referral Swaps</span>
+          <h1 className="text-[28px] md:text-[40px] font-light text-text mb-4" style={{ fontFamily: "var(--font-heading)" }}>
+            Everything You Need for <span className="text-primary" style={{ fontWeight: 400 }}>Safe Referral Swaps</span>
           </h1>
-          <p className="text-[16px] text-text-secondary max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[14px] text-text-secondary max-w-2xl mx-auto leading-relaxed">
             Telefavor connects you with people for referral exchanges on Telegram.
             Build trust, earn ratings, and grow your network — all in one place.
           </p>
         </div>
 
-        <h2 className="text-[22px] font-bold text-text mb-8 text-center">Core Features</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-20">
+        <h2 className="text-[20px] font-light text-text mb-8 text-center" style={{ fontFamily: "var(--font-heading)" }}>Core Features</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-20">
           {features.map((f, i) => (
-            <div key={i} className="bg-bg-card rounded-xl border border-border p-5 card-hover animate-slideUp" style={{ animationDelay: `${i * 60}ms` }}>
-              <div className="w-10 h-10 rounded-lg bg-primary-soft flex items-center justify-center mb-4">
-                <Icon name={f.icon} size={18} className="text-primary" />
+            <div key={i} className="bg-bg-card border border-border rounded-xl p-5 animate-fadeIn">
+              <div className="w-9 h-9 rounded-lg bg-bg-inset flex items-center justify-center mb-4">
+                <Icon name={f.icon} size={16} className="text-primary" />
               </div>
-              <h3 className="text-[15px] font-semibold text-text mb-2">{f.title}</h3>
-              <p className="text-[13px] text-text-secondary leading-relaxed">{f.desc}</p>
+              <h3 className="text-[14px] font-semibold text-text mb-2">{f.title}</h3>
+              <p className="text-[12px] text-text-secondary leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
 
-        <h2 className="text-[22px] font-bold text-text mb-8 text-center">How It Works</h2>
+        <h2 className="text-[20px] font-light text-text mb-8 text-center" style={{ fontFamily: "var(--font-heading)" }}>How It Works</h2>
         <div className="relative mb-20 max-w-2xl mx-auto">
-          <div className="absolute left-[23px] top-0 bottom-0 w-px bg-gradient-to-b from-primary to-transparent" />
+          <div className="absolute left-[21px] top-0 bottom-0 w-px bg-border" />
           <div className="space-y-0">
             {steps.map((s, i) => (
-              <div key={i} className="flex gap-6 items-start animate-slideUp pb-8 last:pb-0" style={{ animationDelay: `${i * 80}ms` }}>
-                <div className="w-[46px] h-[46px] rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-[16px] flex-shrink-0 relative z-10 shadow-lg shadow-primary-glow/20">
+              <div key={i} className="flex gap-5 items-start animate-fadeIn pb-8 last:pb-0">
+                <div className="w-[42px] h-[42px] rounded-full bg-bg-inset border border-border flex items-center justify-center text-text text-[14px] font-semibold flex-shrink-0 relative z-10">
                   {s.num}
                 </div>
                 <div className="pt-2">
-                  <h3 className="text-[17px] font-semibold text-text mb-1">{s.title}</h3>
-                  <p className="text-[14px] text-text-secondary">{s.desc}</p>
+                  <h3 className="text-[15px] font-semibold text-text mb-1">{s.title}</h3>
+                  <p className="text-[13px] text-text-secondary">{s.desc}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <h2 className="text-[22px] font-bold text-text mb-8 text-center">Trust Badge Levels</h2>
+        <h2 className="text-[20px] font-light text-text mb-8 text-center" style={{ fontFamily: "var(--font-heading)" }}>Trust Badge Levels</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-16">
           {badgeLevels.map((b, i) => (
-            <div key={i} className="bg-bg-card rounded-xl p-4 text-center border border-border animate-slideUp" style={{ animationDelay: `${i * 60}ms` }}>
-              <div className="text-[22px] font-bold mb-1" style={{ color: b.color }}>{b.label}</div>
+            <div key={i} className="bg-bg-card border border-border rounded-xl p-4 text-center animate-fadeIn">
+              <div className="text-[20px] font-semibold mb-1" style={{ color: b.color, fontFamily: "var(--font-heading)" }}>{b.label}</div>
               <p className="text-[11px] text-text-muted leading-tight">{b.desc}</p>
             </div>
           ))}
         </div>
 
-        <div className="text-center bg-bg-card rounded-2xl border border-border p-10 animate-fadeIn">
-          <h2 className="text-[22px] font-bold text-text mb-3">Ready to get started?</h2>
-          <p className="text-[14px] text-text-secondary mb-6 max-w-md mx-auto leading-relaxed">
+        <div className="text-center bg-bg-card border border-border rounded-xl p-10 animate-fadeIn max-w-lg mx-auto">
+          <h2 className="text-[20px] font-light text-text mb-3" style={{ fontFamily: "var(--font-heading)" }}>Ready to get started?</h2>
+          <p className="text-[13px] text-text-secondary mb-6 max-w-sm mx-auto leading-relaxed">
             Join Telefavor today and start building your referral network with trusted partners.
           </p>
-          <button onClick={() => router.push("/")} className="px-8 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white text-[15px] font-semibold active:scale-[0.97] hover:shadow-lg hover:shadow-primary-glow/30 transition-all duration-200">
+          <button onClick={() => router.push("/")} className="px-6 py-2.5 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-primary-hover transition-colors">
             Get Started
           </button>
         </div>
       </section>
 
-      <footer className="border-t border-border px-4 md:px-8 py-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[13px] text-text-muted">
+      <footer className="px-4 md:px-[141px] py-6 border-t border-border">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-[12px] text-text-muted">
           <p>Telefavor — Safe Referral Exchanges on Telegram</p>
           <div className="flex items-center gap-4">
             <button onClick={() => router.push("/community")} className="hover:text-text-secondary transition-colors">Community</button>

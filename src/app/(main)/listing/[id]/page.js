@@ -88,42 +88,42 @@ export default function ListingDetailPage() {
   if (!listing || !poster) return null;
 
   return (
-    <div className="animate-fadeIn">
-      <div className="mb-6">
-        <h1 className="text-[24px] font-bold text-text">Listing Detail</h1>
-        <p className="text-text-secondary text-[14px] mt-1">View listing and connect via Telegram</p>
+    <div className="animate-fadeIn" style={{ marginBottom: "250px" }}>
+      <div className="mb-8">
+        <h1 className="text-[26px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>Listing Detail</h1>
+        <p className="text-text-secondary text-[13px] mt-1.5">View listing and connect via Telegram</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="md:col-span-2 space-y-5">
-          <div className="bg-bg-card rounded-xl border border-border p-5">
+          <div className="bg-bg-card border border-border rounded-xl p-5">
             <div className="flex items-center gap-4">
-              <Avatar src={poster.photo_url} name={poster.display_name} size={64} onClick={() => router.push(`/user/${listing.user_id}`)} />
+              <Avatar src={poster.photo_url} name={poster.display_name} size={56} onClick={() => router.push(`/user/${listing.user_id}`)} />
               <div className="min-w-0">
-                <h2 className="text-[18px] font-bold text-text">{poster.display_name || "Unknown"}</h2>
-                <a href={`https://t.me/${listing.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-primary text-[14px] hover:underline">@{listing.telegram_username}</a>
+                <h2 className="text-[17px] font-semibold text-text">{poster.display_name || "Unknown"}</h2>
+                <a href={`https://t.me/${listing.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-link text-[13px] hover:text-link-hover">@{listing.telegram_username}</a>
                 <div className="mt-2">
-                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary-soft text-primary text-[11px] font-medium">{listing.title}</span>
+                  <span className="inline-block px-2 py-0.5 rounded bg-primary-soft text-primary text-[10px] font-medium">{listing.title}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {listing.message && (
-            <div className="bg-bg-card rounded-xl border border-border p-5">
-              <h3 className="text-[13px] text-text-muted font-medium uppercase tracking-wider mb-3">About this referral</h3>
-              <p className="text-[14px] text-text leading-relaxed whitespace-pre-wrap">{listing.message}</p>
+            <div className="bg-bg-card border border-border rounded-xl p-5">
+              <h3 className="text-[10px] text-text-muted font-medium uppercase tracking-wider mb-3">About this referral</h3>
+              <p className="text-[13px] text-text leading-relaxed whitespace-pre-wrap">{listing.message}</p>
             </div>
           )}
-          <div className="bg-bg-card rounded-xl border border-border p-5">
-            <h3 className="text-[13px] text-text-muted font-medium uppercase tracking-wider mb-4">Trust Score</h3>
+          <div className="bg-bg-card border border-border rounded-xl p-5">
+            <h3 className="text-[10px] text-text-muted font-medium uppercase tracking-wider mb-4">Trust Score</h3>
             <TrustScoreSection userData={poster} size="large" />
           </div>
         </div>
 
         <div className="space-y-4">
-          <div className="bg-bg-card rounded-xl border border-border p-5">
-            <div className="space-y-3 text-[13px] text-text-muted">
+          <div className="bg-bg-card border border-border rounded-xl p-5">
+            <div className="space-y-3 text-[12px] text-text-muted">
               <div className="flex items-center justify-between">
                 <span>Posted</span>
                 <span className="text-text">{listing.posted_at ? new Date(listing.posted_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Recently"}</span>
@@ -136,16 +136,16 @@ export default function ListingDetailPage() {
                 <button
                   onClick={handleContact}
                   disabled={isOwnListing}
-                  className="ripple w-full py-3 rounded-xl bg-primary text-white text-[14px] font-semibold disabled:opacity-40 hover:shadow-lg hover:shadow-primary-glow/30 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-lg bg-primary text-white text-[13px] font-semibold disabled:opacity-40 transition-opacity hover:bg-primary-hover flex items-center justify-center gap-2"
                 >
-                  <Icon name="send" size={16} />
+                  <Icon name="send" size={14} />
                   {isOwnListing ? "This is your listing" : "Contact on Telegram"}
                 </button>
                 {!isOwnListing && !alreadyRated && (
-                  <p className="text-[11px] text-center mt-2 text-text-muted">You'll be asked to rate after contacting</p>
+                  <p className="text-[10px] text-center mt-2 text-text-muted">You'll be asked to rate after contacting</p>
                 )}
                 {alreadyRated && (
-                  <p className="text-[11px] text-green text-center mt-2">✓ You rated this swap</p>
+                  <p className="text-[10px] text-green text-center mt-2">✓ You rated this swap</p>
                 )}
               </div>
             </div>

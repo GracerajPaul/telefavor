@@ -64,17 +64,17 @@ export default function ExplorePage() {
     .sort((a, b) => sort === "newest" ? new Date(b.posted_at) - new Date(a.posted_at) : (b.contact_taps || 0) - (a.contact_taps || 0));
 
   return (
-    <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} className="animate-fadeIn">
-      <div className="flex items-center justify-between mb-6">
+    <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} className="animate-fadeIn" style={{ marginBottom: "250px" }}>
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-[24px] font-bold text-text">Explore</h1>
-          <p className="text-text-secondary text-[14px] mt-1">Find referral partners</p>
+          <h1 className="text-[26px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>Explore</h1>
+          <p className="text-text-secondary text-[13px] mt-1.5">Find referral partners</p>
         </div>
         <div className="flex items-center gap-2">
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="bg-bg-elevated border border-border text-text text-[13px] rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors cursor-pointer appearance-none"
+            className="bg-bg-inset border border-border text-text text-[12px] rounded-lg px-2.5 py-2 outline-none focus:border-primary transition-colors cursor-pointer appearance-none"
           >
             <option value="newest">Newest</option>
             <option value="taps">Most Taps</option>
@@ -82,18 +82,18 @@ export default function ExplorePage() {
         </div>
       </div>
 
-      <div className="relative mb-4">
-        <Icon name="search" size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+      <div className="relative mb-5">
+        <Icon name="search" size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search listings..."
-          className="w-full bg-bg-elevated border border-border text-text text-[14px] rounded-xl pl-10 pr-9 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-text-muted"
+          className="w-full bg-bg-inset border border-border text-text text-[13px] rounded-lg pl-8 pr-8 py-2.5 outline-none focus:border-primary transition-colors placeholder:text-text-muted"
         />
         {search && (
           <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text">
-            <Icon name="x" size={16} />
+            <Icon name="x" size={14} />
           </button>
         )}
       </div>
@@ -109,36 +109,36 @@ export default function ExplorePage() {
       )}
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[...Array(6)].map((_, i) => <ListingSkeleton key={i} />)}
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 animate-fadeIn">
-          <div className="w-16 h-16 rounded-2xl bg-bg-elevated flex items-center justify-center mx-auto mb-4">
-            <Icon name="search" size={24} className="text-text-muted" />
+          <div className="w-14 h-14 rounded-xl bg-bg-inset flex items-center justify-center mx-auto mb-4">
+            <Icon name="search" size={22} className="text-text-muted" />
           </div>
-          <p className="text-[16px] font-medium text-text mb-2">
+          <p className="text-[15px] font-medium text-text mb-2">
             {search || category ? "No matches found" : "No listings yet"}
           </p>
-          <p className="text-[13px] text-text-secondary mb-6 max-w-xs mx-auto leading-relaxed">
+          <p className="text-[12px] text-text-secondary mb-6 max-w-xs mx-auto leading-relaxed">
             {search || category
               ? "Try a different search term or category"
               : "Be the first to post a referral exchange listing"}
           </p>
           {search || category ? (
-            <button onClick={() => { setSearch(""); setCategory(""); }} className="px-5 py-2.5 rounded-xl bg-primary text-white text-[13px] font-semibold hover:bg-primary-hover transition-all active:scale-[0.98]">
+            <button onClick={() => { setSearch(""); setCategory(""); }} className="px-4 py-2 rounded-lg bg-primary text-white text-[12px] font-semibold hover:bg-primary-hover transition-colors">
               Clear Filters
             </button>
           ) : (
-            <button onClick={() => router.push("/post")} className="px-5 py-2.5 rounded-xl bg-primary text-white text-[13px] font-semibold hover:bg-primary-hover transition-all active:scale-[0.98]">
+            <button onClick={() => router.push("/post")} className="px-4 py-2 rounded-lg bg-primary text-white text-[12px] font-semibold hover:bg-primary-hover transition-colors">
               Post a Listing
             </button>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filtered.map((l, i) => (
-            <div key={l.id} className="animate-slideUp" style={{ animationDelay: `${i * 50}ms` }}>
+            <div key={l.id} className="animate-fadeIn" style={{ animationDelay: `${i * 40}ms` }}>
               <ListingCard
                 listing={l}
                 userData={l.userData}
