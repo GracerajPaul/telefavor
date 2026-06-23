@@ -9,6 +9,7 @@ import { ProfileSkeleton } from "../../../../components/Skeleton";
 import { useAuth } from "../../../../context/AuthContext";
 import { useToast } from "../../../../components/Toast";
 import { getUser, getUserListings, createRating } from "../../../../services/database";
+import Icon from "../../../../components/Icon";
 
 export default function PublicProfilePage() {
   const { userId } = useParams();
@@ -54,21 +55,20 @@ export default function PublicProfilePage() {
 
   return (
     <div className="animate-fadeIn">
-      {/* Header */}
       <div className="flex items-center gap-3 mb-5">
-        <button onClick={() => router.push("/explore")} className="w-7 h-7 rounded-full bg-[#151230] border border-[#1E1B3A] flex items-center justify-center text-[#94A3B8] hover:text-white hover:bg-[#1D1940] transition-all flex-shrink-0">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <button onClick={() => router.push("/explore")} className="w-7 h-7 rounded-full bg-bg-card border border-border flex items-center justify-center text-text-muted hover:text-text hover:bg-bg-elevated transition-all flex-shrink-0">
+          <Icon name="arrow-left" size={12} />
         </button>
-        <h1 className="text-[20px] font-bold text-white">Public <span className="text-[#06B6D4]">Profile</span></h1>
+        <h1 className="text-[20px] font-bold text-text">Public Profile</h1>
       </div>
 
-      {/* Profile Card */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 md:p-5 mb-4">
+      <div className="bg-bg-card rounded-xl border border-border p-4 md:p-5 mb-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex items-start gap-4 sm:flex-col sm:items-center">
             <Avatar src={userData.photo_url} name={userData.display_name} size={48} />
             {!isSelf && (
-              <button onClick={handleContact} className="sm:hidden flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#06B6D4]/15 text-[#06B6D4] text-[12px] font-semibold hover:bg-[#06B6D4]/25 transition-colors active:scale-95">
+              <button onClick={handleContact} className="sm:hidden flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-soft text-primary text-[12px] font-semibold hover:bg-primary/25 transition-colors active:scale-95">
+                <Icon name="send" size={12} />
                 Contact
               </button>
             )}
@@ -76,14 +76,15 @@ export default function PublicProfilePage() {
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="text-[18px] md:text-[20px] font-bold text-white truncate">{userData.display_name || "Unknown"}</h2>
+                <h2 className="text-[18px] md:text-[20px] font-bold text-text truncate">{userData.display_name || "Unknown"}</h2>
                 <div className="flex flex-wrap items-center gap-2 mt-0.5">
-                  <a href={`https://t.me/${userData.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-[#06B6D4] text-[13px] md:text-[14px] hover:underline font-medium truncate">@{userData.telegram_username}</a>
+                  <a href={`https://t.me/${userData.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-primary text-[13px] md:text-[14px] hover:underline font-medium truncate">@{userData.telegram_username}</a>
                   {userData.telegram_verified && (
-                    <span className="text-[11px] text-[#22C55E] font-medium">✓ Verified</span>
+                    <span className="text-[11px] text-green font-medium">✓ Verified</span>
                   )}
                   {!isSelf && (
-                    <button onClick={handleContact} className="hidden sm:flex items-center gap-1 px-3 py-1 rounded-full bg-[#06B6D4]/15 text-[#06B6D4] text-[12px] font-semibold hover:bg-[#06B6D4]/25 transition-colors active:scale-95">
+                    <button onClick={handleContact} className="hidden sm:flex items-center gap-1 px-3 py-1 rounded-full bg-primary-soft text-primary text-[12px] font-semibold hover:bg-primary/25 transition-colors active:scale-95">
+                      <Icon name="send" size={12} />
                       Contact
                     </button>
                   )}
@@ -92,63 +93,61 @@ export default function PublicProfilePage() {
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <Badge level={null} score={userData.trust_score} ratingsCount={totalRatings} />
                 {totalRatings > 0 ? (
-                  <span className="text-[12px] text-[#94A3B8]">{userData.green_ratings || 0}/{totalRatings}</span>
+                  <span className="text-[12px] text-text-muted">{userData.green_ratings || 0}/{totalRatings}</span>
                 ) : (
-                  <span className="text-[12px] text-[#5A5A7A]">No ratings</span>
+                  <span className="text-[12px] text-text-tertiary">No ratings</span>
                 )}
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[12px] text-[#94A3B8]">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[12px] text-text-muted">
               <span>Joined {userData.created_at ? new Date(userData.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "recently"}</span>
-              <span className="text-[#1E1B3A]">·</span>
+              <span className="text-border">·</span>
               <span>{listings.length} listing{listings.length !== 1 ? "s" : ""}</span>
             </div>
             <div className="flex gap-2 mt-2 flex-wrap">
-              <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-white">{userData.total_listings_posted || 0}</p>
-                <p className="text-[9px] text-[#94A3B8]">Posts</p>
+              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
+                <p className="text-[14px] md:text-[15px] font-bold text-text">{userData.total_listings_posted || 0}</p>
+                <p className="text-[9px] text-text-muted">Posts</p>
               </div>
-              <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-[#22C55E]">{userData.green_ratings || 0}</p>
-                <p className="text-[9px] text-[#94A3B8]">Green</p>
+              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
+                <p className="text-[14px] md:text-[15px] font-bold text-green">{userData.green_ratings || 0}</p>
+                <p className="text-[9px] text-text-muted">Green</p>
               </div>
-              <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-[#EF4444]">{userData.red_ratings || 0}</p>
-                <p className="text-[9px] text-[#94A3B8]">Red</p>
+              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
+                <p className="text-[14px] md:text-[15px] font-bold text-red">{userData.red_ratings || 0}</p>
+                <p className="text-[9px] text-text-muted">Red</p>
               </div>
             </div>
             {userData.description && (
-              <p className="text-[13px] text-[#94A3B8] mt-3 pt-3 border-t border-[#1E1B3A] leading-relaxed">{userData.description}</p>
+              <p className="text-[13px] text-text-secondary mt-3 pt-3 border-t border-border leading-relaxed">{userData.description}</p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Trust Score Detail */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 mb-4">
-        <h3 className="text-[11px] text-[#94A3B8] font-medium uppercase tracking-wider mb-3">Trust Score</h3>
+      <div className="bg-bg-card rounded-xl border border-border p-4 mb-4">
+        <h3 className="text-[11px] text-text-muted font-medium uppercase tracking-wider mb-3">Trust Score</h3>
         <TrustScoreSection userData={userData} size="large" />
       </div>
 
-      {/* User's Listings */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4">
-        <h3 className="text-[11px] text-[#94A3B8] font-medium uppercase tracking-wider mb-3">Listings ({listings.length})</h3>
+      <div className="bg-bg-card rounded-xl border border-border p-4">
+        <h3 className="text-[11px] text-text-muted font-medium uppercase tracking-wider mb-3">Listings ({listings.length})</h3>
         {listings.length === 0 ? (
-          <p className="text-[13px] text-[#5A5A7A] italic">No listings yet</p>
+          <p className="text-[13px] text-text-tertiary italic">No listings yet</p>
         ) : (
           <div className="space-y-2">
             {listings.map((l) => (
-              <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0D0B1A] border border-[#1E1B3A] hover:border-[#06B6D4]/30 transition-colors">
+              <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-bg-inset border border-border hover:border-primary/30 transition-colors">
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] text-white font-medium">{l.title}</p>
-                  {l.message && <p className="text-[12px] text-[#94A3B8] mt-1 leading-relaxed">{l.message}</p>}
-                  <div className="flex items-center gap-3 mt-1.5 text-[11px] text-[#5A5A7A]">
+                  <p className="text-[14px] text-text font-medium">{l.title}</p>
+                  {l.message && <p className="text-[12px] text-text-secondary mt-1 leading-relaxed">{l.message}</p>}
+                  <div className="flex items-center gap-3 mt-1.5 text-[11px] text-text-tertiary">
                     <span>{new Date(l.posted_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-                    <span className="text-[#1E1B3A]">|</span>
+                    <span className="text-border">|</span>
                     <span>@{l.telegram_username}</span>
                   </div>
                 </div>
-                <span className={`text-[11px] px-2.5 py-1 rounded-full font-medium ml-3 flex-shrink-0 ${l.is_active ? "bg-[#22C55E]/15 text-[#22C55E]" : "bg-[#94A3B8]/15 text-[#94A3B8]"}`}>{l.is_active ? "Active" : "Expired"}</span>
+                <span className={`text-[11px] px-2.5 py-1 rounded-full font-medium ml-3 flex-shrink-0 ${l.is_active ? "bg-green/15 text-green" : "bg-text-muted/15 text-text-muted"}`}>{l.is_active ? "Active" : "Expired"}</span>
               </div>
             ))}
           </div>

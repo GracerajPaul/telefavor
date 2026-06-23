@@ -31,11 +31,11 @@ export default function MainLayout({ children }) {
   }, [isLoggedIn, profile, router, pathname]);
 
   return (
-    <div className="min-h-screen bg-[#0D0B1A] bg-grid">
+    <div className="min-h-screen bg-bg-dark bg-grid">
       <TopNav />
       <div className="pt-14 pb-20 md:pb-8">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
-          <div className="flex-1">{children}</div>
+          {children}
         </div>
       </div>
       <BottomNav />

@@ -2,37 +2,37 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "../services/auth";
-import { updateUser } from "../services/database";
 import { useAuth } from "../context/AuthContext";
+import Icon from "../components/Icon";
 
 const features = [
   {
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#06B6D4" strokeWidth="1.8"/><path d="M12 8V12L15 15" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round"/></svg>,
+    icon: "clock",
     title: "24h Listings",
     desc: "Post one active listing at a time. Automatically expires after 24 hours.",
   },
   {
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    icon: "star",
     title: "Trust Scores",
     desc: "Every swap earns a rating. Build your reputation with a transparent trust score.",
   },
   {
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 12C21 13.2 20.5 14.2 19.7 15C18.9 15.8 17.9 16.3 16.7 16.3C14.3 16.3 12.3 14.3 12.3 11.9C12.3 9.5 14.3 7.5 16.7 7.5C17.9 7.5 18.9 8 19.7 8.8" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round"/><path d="M3 7H11M3 12H8M3 17H5" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round"/></svg>,
+    icon: "send",
     title: "Direct Telegram",
     desc: "One-tap contact via Telegram. No phone numbers, just your @username.",
   },
   {
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 12L11 14L15 10" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="9" stroke="#06B6D4" strokeWidth="1.8"/></svg>,
+    icon: "check",
     title: "Verified Reviews",
     desc: "One rating per swap. Honest, actionable feedback you can trust.",
   },
   {
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="#06B6D4" strokeWidth="1.8"/><path d="M12 2V4M12 20V22M2 12H4M20 12H22" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round"/></svg>,
+    icon: "filter",
     title: "Category Filters",
     desc: "Browse by type — channels, bots, games, TON, and more.",
   },
   {
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#06B6D4" strokeWidth="1.8"/><path d="M4 20C4 16.6863 7.58172 14 12 14C16.4183 14 20 16.6863 20 20" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round"/></svg>,
+    icon: "users",
     title: "Public Profiles",
     desc: "View any user's history and trust score before swapping.",
   },
@@ -40,7 +40,7 @@ const features = [
 
 export default function LandingPage() {
   const router = useRouter();
-  const { user, profile, loading, profileLoading, isAuthenticated, isLoggedIn, refreshProfile } = useAuth();
+  const { user, profile, loading, isAuthenticated, isLoggedIn } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -82,56 +82,55 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0B1A]">
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-6 md:px-12 py-4 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-bg-dark">
+      <nav className="flex items-center justify-between px-4 md:px-8 py-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-2.5">
-          <img src="/logo.jpeg" alt="Telefavor" className="w-9 h-9 rounded-lg object-cover" />
-          <span className="text-[18px] font-bold text-white">Telefavor</span>
+          <div className="w-8 h-8 rounded-lg overflow-hidden ring-1 ring-white/10">
+            <img src="/logo.jpeg" alt="" className="w-full h-full object-cover" />
+          </div>
+          <span className="text-[17px] font-bold text-text">Telefavor</span>
         </div>
-        <div className="flex items-center gap-6">
-          <button onClick={() => router.push("/features")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Features</button>
-          <button onClick={() => router.push("/community")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Community</button>
-          <button onClick={() => router.push("/terms")} className="text-[14px] text-[#94A3B8] hover:text-white transition-colors">Terms</button>
+        <div className="flex items-center gap-1">
+          <button onClick={() => router.push("/features")} className="px-3 py-1.5 rounded-lg text-[13px] text-text-muted hover:text-text-secondary hover:bg-bg-elevated transition-all">Features</button>
+          <button onClick={() => router.push("/community")} className="px-3 py-1.5 rounded-lg text-[13px] text-text-muted hover:text-text-secondary hover:bg-bg-elevated transition-all">Community</button>
+          <button onClick={() => router.push("/terms")} className="px-3 py-1.5 rounded-lg text-[13px] text-text-muted hover:text-text-secondary hover:bg-bg-elevated transition-all">Terms</button>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="px-6 md:px-12 pt-16 md:pt-24 pb-20 max-w-6xl mx-auto">
+      <section className="px-4 md:px-8 pt-16 md:pt-24 pb-20 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row gap-12 items-center">
-          <div className="flex-1 animate-fadeIn">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/20 text-[#06B6D4] text-[13px] font-medium mb-5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#06B6D4" strokeWidth="1.8"/><path d="M12 8V12L15 15" stroke="#06B6D4" strokeWidth="1.8" strokeLinecap="round"/></svg>
+          <div className="flex-1 animate-fadeIn w-full">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-soft border border-primary/20 text-primary text-[12px] font-medium mb-5">
+              <Icon name="shield" size={14} />
               Trusted referral exchange network
             </div>
-            <h1 className="text-[42px] md:text-[56px] font-bold text-white leading-[1.1] mb-5">
+            <h1 className="text-[38px] md:text-[52px] font-bold text-text leading-[1.1] mb-5 tracking-tight">
               Swap referrals<br />
-              <span className="text-[#06B6D4]">with confidence</span>
+              <span className="text-primary">with confidence</span>
             </h1>
-            <p className="text-[#94A3B8] text-[17px] max-w-md leading-relaxed mb-8">
+            <p className="text-text-secondary text-[16px] max-w-md leading-relaxed mb-8">
               Telefavor connects you with real people for referral exchanges on Telegram.
               Post a listing, find a partner, build your reputation.
             </p>
 
-            {/* Sign-in card */}
-            <div className="bg-[#151230] rounded-2xl border border-[#1E1B3A] p-5 max-w-sm">
-              {error && <p className="text-[#EF4444] text-[13px] mb-3">{error}</p>}
+            <div className="bg-bg-card rounded-2xl border border-border p-5 max-w-sm">
+              {error && <p className="text-red text-[13px] mb-3">{error}</p>}
               <label className="flex items-start gap-3 cursor-pointer group mb-4">
                 <div className="relative mt-0.5 flex-shrink-0">
                   <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="sr-only" />
-                  <div className={"w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center " + (acceptedTerms ? "bg-[#06B6D4] border-[#06B6D4]" : "border-[#1E1B3A] bg-[#0D0B1A] group-hover:border-[#06B6D4]/50")}>
-                    {acceptedTerms && <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 13L9 17L19 7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                  <div className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center ${acceptedTerms ? "bg-primary border-primary" : "border-border bg-bg-inset group-hover:border-primary/50"}`}>
+                    {acceptedTerms && <Icon name="check" size={14} className="text-white" />}
                   </div>
                 </div>
-                <span className="text-[13px] text-[#94A3B8] leading-relaxed select-none">
+                <span className="text-[13px] text-text-secondary leading-relaxed select-none">
                   I accept the{" "}
-                  <button onClick={(e) => { e.stopPropagation(); router.push("/terms"); }} className="text-[#06B6D4] hover:text-[#0EA5E9] transition-colors underline underline-offset-2">Terms of Service</button>
+                  <button onClick={(e) => { e.stopPropagation(); router.push("/terms"); }} className="text-primary hover:text-primary-hover transition-colors underline underline-offset-2">Terms of Service</button>
                 </span>
               </label>
               <button
                 onClick={handleGoogleSignIn}
                 disabled={signingIn || !acceptedTerms}
-                className="ripple w-full py-3 rounded-xl bg-gradient-to-r from-[#06B6D4] to-[#0EA5E9] text-white text-[15px] font-semibold flex items-center justify-center gap-3 disabled:opacity-40 active:scale-[0.98] transition-all duration-200 hover:shadow-lg hover:shadow-[#06B6D4]/30"
+                className="ripple w-full py-3 rounded-xl bg-primary text-white text-[14px] font-semibold flex items-center justify-center gap-3 disabled:opacity-40 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary-glow/20"
               >
                 {signingIn ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -143,111 +142,103 @@ export default function LandingPage() {
                 )}
               </button>
 
-              {/* Divider */}
-              <div className="flex items-center gap-3 mt-5 mb-4">
-                <div className="flex-1 h-px bg-[#1E1B3A]" />
-                <span className="text-[11px] text-[#5A5A7A] font-medium uppercase tracking-wider">or</span>
-                <div className="flex-1 h-px bg-[#1E1B3A]" />
-              </div>
+              {!signingIn && (
+                <div className="relative my-5">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border" />
+                  </div>
+                  <div className="relative flex justify-center">
+                    <span className="px-3 text-[11px] text-text-muted bg-bg-card">or</span>
+                  </div>
+                </div>
+              )}
 
-              {/* Premium Access Button */}
-              <button onClick={() => setPremiumOpen(true)} className="ripple w-full py-3 rounded-xl bg-gradient-to-r from-[#F6C000] to-[#E5A500] text-[#0D0B1A] text-[14px] font-bold flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all duration-200 hover:shadow-lg hover:shadow-[#F6C000]/30">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Premium Access
-              </button>
+              {!signingIn && (
+                <button onClick={() => setPremiumOpen(true)} className="w-full py-3 rounded-xl bg-gold-soft text-gold text-[14px] font-bold flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all duration-200 hover:bg-gold-soft/20">
+                  <Icon name="star" size={16} />
+                  Premium Access
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Hero graphic */}
           <div className="hidden md:flex items-center justify-center flex-1 animate-fadeIn">
             <div className="relative w-80 h-80">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#06B6D4]/20 via-[#0EA5E9]/10 to-transparent rounded-full animate-pulseGlow" />
-              <div className="absolute inset-4 bg-[#151230] rounded-full border border-[#1E1B3A] flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-full animate-pulseGlow" />
+              <div className="absolute inset-4 bg-bg-card rounded-full border border-border flex items-center justify-center">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#06B6D4] to-[#0EA5E9] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#06B6D4]/30">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5"/>
-                    </svg>
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary-glow/30">
+                    <Icon name="star" size={28} className="text-white" />
                   </div>
-                  <p className="text-white text-[15px] font-medium">Trust Score</p>
-                  <p className="text-[22px] font-bold text-[#22C55E] mt-1">92%</p>
-                  <div className="flex items-center justify-center gap-3 mt-3 text-[12px] text-[#94A3B8]">
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#22C55E]" />12 green</span>
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#EF4444]" />1 red</span>
+                  <p className="text-text text-[15px] font-medium">Trust Score</p>
+                  <p className="text-[22px] font-bold text-green mt-1">92%</p>
+                  <div className="flex items-center justify-center gap-3 mt-3 text-[12px] text-text-secondary">
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green" />12 green</span>
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red" />1 red</span>
                   </div>
                 </div>
               </div>
-              {/* Floating elements */}
-              <div className="absolute -top-3 -right-3 w-14 h-14 bg-[#151230] rounded-xl border border-[#1E1B3A] flex items-center justify-center animate-float shadow-lg" style={{ animationDelay: "0.5s" }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#22C55E" strokeWidth="1.5"/><path d="M12 8V16M8 12H16" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <div className="absolute -top-3 -right-3 w-14 h-14 bg-bg-card rounded-xl border border-border flex items-center justify-center animate-float shadow-lg" style={{ animationDelay: "0.5s" }}>
+                <Icon name="users" size={22} className="text-green" />
               </div>
-              <div className="absolute -bottom-2 -left-4 w-12 h-12 bg-[#151230] rounded-xl border border-[#1E1B3A] flex items-center justify-center animate-float shadow-lg" style={{ animationDelay: "1s" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
-              <div className="absolute top-10 -left-8 w-10 h-10 bg-[#151230] rounded-xl border border-[#1E1B3A] flex items-center justify-center animate-float shadow-lg" style={{ animationDelay: "1.5s" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#06B6D4" strokeWidth="1.5"/><path d="M4 20C4 16.6863 7.58172 14 12 14C16.4183 14 20 16.6863 20 20" stroke="#06B6D4" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <div className="absolute -bottom-2 -left-4 w-12 h-12 bg-bg-card rounded-xl border border-border flex items-center justify-center animate-float shadow-lg" style={{ animationDelay: "1s" }}>
+                <Icon name="star" size={20} className="text-yellow" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="px-6 md:px-12 py-20 max-w-6xl mx-auto border-t border-[#1E1B3A]">
-        <div className="text-center mb-14">
-          <h2 className="text-[32px] font-bold text-white mb-3">Why Telefavor?</h2>
-          <p className="text-[#94A3B8] text-[16px] max-w-lg mx-auto">Built for safe, transparent referral swapping on Telegram</p>
+      <section className="px-4 md:px-8 py-20 max-w-7xl mx-auto border-t border-border">
+        <div className="text-center mb-12">
+          <h2 className="text-[28px] font-bold text-text mb-3">Why Telefavor?</h2>
+          <p className="text-text-secondary text-[15px] max-w-lg mx-auto">Built for safe, transparent referral swapping on Telegram</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((f, i) => (
-            <div key={i} className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-5 hover:border-[#06B6D4]/30 transition-all duration-300 card-hover">
-              <div className="w-10 h-10 rounded-lg bg-[#06B6D4]/10 flex items-center justify-center mb-4">{f.icon}</div>
-              <h3 className="text-[16px] font-semibold text-white mb-2">{f.title}</h3>
-              <p className="text-[13px] text-[#94A3B8] leading-relaxed">{f.desc}</p>
+            <div key={i} className="bg-bg-card rounded-xl border border-border p-5 card-hover animate-slideUp" style={{ animationDelay: `${i * 60}ms` }}>
+              <div className="w-10 h-10 rounded-lg bg-primary-soft flex items-center justify-center mb-4">
+                <Icon name={f.icon} size={18} className="text-primary" />
+              </div>
+              <h3 className="text-[15px] font-semibold text-text mb-2">{f.title}</h3>
+              <p className="text-[13px] text-text-secondary leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-[#1E1B3A] px-6 md:px-12 py-8">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[13px] text-[#94A3B8]">
+      <footer className="border-t border-border px-4 md:px-8 py-8">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[13px] text-text-muted">
           <p className="text-center md:text-left">Telefavor — Safe Referral Exchanges on Telegram</p>
           <div className="flex items-center gap-4">
-            <button onClick={() => router.push("/features")} className="hover:text-white transition-colors">Features</button>
-            <button onClick={() => router.push("/community")} className="hover:text-white transition-colors">Community</button>
-            <button onClick={() => router.push("/terms")} className="hover:text-white transition-colors">Terms</button>
+            <button onClick={() => router.push("/features")} className="hover:text-text-secondary transition-colors">Features</button>
+            <button onClick={() => router.push("/community")} className="hover:text-text-secondary transition-colors">Community</button>
+            <button onClick={() => router.push("/terms")} className="hover:text-text-secondary transition-colors">Terms</button>
           </div>
         </div>
       </footer>
 
-      {/* Premium Access Modal */}
       {premiumOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 animate-fadeIn" onClick={() => { setPremiumOpen(false); setPremiumCode(""); setPremiumError(""); setPremiumSuccess(false); }} />
-          <div className="relative w-full max-w-sm bg-[#151230] rounded-2xl p-6 animate-scaleIn border border-[#1E1B3A] shadow-2xl">
+          <div className="relative w-full max-w-sm bg-bg-card rounded-2xl p-6 animate-scaleIn border border-border shadow-2xl">
             {premiumSuccess ? (
               <div className="text-center py-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#F6C000] to-[#E5A500] flex items-center justify-center mx-auto mb-4">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#0D0B1A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold to-yellow flex items-center justify-center mx-auto mb-4">
+                  <Icon name="check" size={26} className="text-bg-dark" />
                 </div>
-                <h2 className="text-[18px] font-bold text-white mb-2">Premium Access Granted!</h2>
-                <p className="text-[13px] text-[#94A3B8] leading-relaxed">Redirecting you to the app...</p>
+                <h2 className="text-[17px] font-bold text-text mb-2">Premium Access Granted!</h2>
+                <p className="text-[13px] text-text-secondary leading-relaxed">Redirecting you to the app...</p>
               </div>
             ) : (
               <>
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F6C000] to-[#E5A500] flex items-center justify-center flex-shrink-0">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#0D0B1A" stroke="#0D0B1A" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold to-yellow flex items-center justify-center flex-shrink-0">
+                    <Icon name="star" size={20} className="text-bg-dark" />
                   </div>
                   <div>
-                    <h2 className="text-[17px] font-semibold text-white">Premium Access</h2>
-                    <p className="text-[12px] text-[#94A3B8]">Enter your 6-digit premium code</p>
+                    <h2 className="text-[16px] font-semibold text-text">Premium Access</h2>
+                    <p className="text-[12px] text-text-secondary">Enter your 6-digit premium code</p>
                   </div>
                 </div>
                 <input
@@ -255,13 +246,13 @@ export default function LandingPage() {
                   value={premiumCode}
                   onChange={(e) => setPremiumCode(e.target.value.replace((/\D/g), "").slice(0, 6))}
                   placeholder="000000"
-                  className="w-full bg-[#0D0B1A] text-white text-[24px] text-center tracking-[10px] rounded-xl px-4 py-4 outline-none border border-transparent focus:border-[#F6C000] transition-all duration-200 font-mono placeholder:text-[#5A5A7A]"
+                  className="w-full bg-bg-inset text-text text-[24px] text-center tracking-[10px] rounded-xl px-4 py-4 outline-none border border-border focus:border-gold transition-all duration-200 font-mono placeholder:text-text-muted"
                   maxLength={6}
                   autoFocus
                 />
-                {premiumError && <p className="text-[#EF4444] text-[12px] mt-2 text-center">{premiumError}</p>}
+                {premiumError && <p className="text-red text-[12px] mt-2 text-center">{premiumError}</p>}
                 <div className="flex gap-3 mt-4">
-                  <button onClick={() => { setPremiumOpen(false); setPremiumCode(""); setPremiumError(""); }} className="flex-1 py-3 rounded-xl bg-[#1A1A30] text-[#94A3B8] text-[14px] font-medium hover:bg-[#1D1940] transition-colors active:scale-95">Cancel</button>
+                  <button onClick={() => { setPremiumOpen(false); setPremiumCode(""); setPremiumError(""); }} className="flex-1 py-3 rounded-xl bg-bg-elevated text-text-secondary text-[14px] font-medium hover:text-text hover:bg-border transition-all active:scale-95">Cancel</button>
                   <button
                     onClick={async () => {
                       setPremiumSaving(true);
@@ -283,10 +274,10 @@ export default function LandingPage() {
                       }
                     }}
                     disabled={premiumSaving || premiumCode.length !== 6}
-                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#F6C000] to-[#E5A500] text-[#0D0B1A] text-[14px] font-bold disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-gold to-yellow text-bg-dark text-[14px] font-bold disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2"
                   >
                     {premiumSaving ? (
-                      <div className="w-5 h-5 border-2 border-[#0D0B1A]/30 border-t-[#0D0B1A] rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-bg-dark/30 border-t-bg-dark rounded-full animate-spin" />
                     ) : (
                       <span>Verify Code</span>
                     )}

@@ -1,15 +1,17 @@
 export function ListingSkeleton() {
   return (
-    <div className="flex items-center gap-3 px-4 py-3 bg-[#151230]">
-      <div className="w-12 h-12 rounded-full shimmer flex-shrink-0" />
-      <div className="flex-1 space-y-2">
-        <div className="h-4 w-32 rounded shimmer" />
-        <div className="h-3 w-48 rounded shimmer" />
-        <div className="h-3 w-24 rounded shimmer" />
+    <div className="bg-bg-card rounded-xl border border-border p-4 space-y-3">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full skeleton" />
+        <div className="flex-1 space-y-2">
+          <div className="h-3 skeleton rounded-md w-3/4" />
+          <div className="h-2.5 skeleton rounded-md w-1/2" />
+        </div>
       </div>
-      <div className="flex flex-col items-end gap-2">
-        <div className="h-5 w-16 rounded-full shimmer" />
-        <div className="h-3 w-14 rounded shimmer" />
+      <div className="h-3 skeleton rounded-md w-2/3" />
+      <div className="flex gap-2 pt-1">
+        <div className="h-5 w-16 skeleton rounded-full" />
+        <div className="h-5 w-12 skeleton rounded-full ml-auto" />
       </div>
     </div>
   );
@@ -17,10 +19,20 @@ export function ListingSkeleton() {
 
 export function ProfileSkeleton() {
   return (
-    <div className="flex flex-col items-center py-8 space-y-4">
-      <div className="w-20 h-20 rounded-full shimmer" />
-      <div className="h-5 w-32 rounded shimmer" />
-      <div className="h-4 w-24 rounded shimmer" />
+    <div className="space-y-4">
+      <div className="bg-bg-card rounded-xl border border-border p-5">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-full skeleton" />
+          <div className="flex-1 space-y-2.5">
+            <div className="h-4 skeleton rounded-md w-1/2" />
+            <div className="h-3 skeleton rounded-md w-1/3" />
+          </div>
+        </div>
+      </div>
+      <div className="bg-bg-card rounded-xl border border-border p-5 space-y-3">
+        <div className="h-3 skeleton rounded-md w-1/4" />
+        <div className="h-12 skeleton rounded-lg" />
+      </div>
     </div>
   );
 }

@@ -21,8 +21,11 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/logo.jpeg" type="image/jpeg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-[#0D0B1A] text-white antialiased">
+      <body className="bg-bg-dark text-text antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

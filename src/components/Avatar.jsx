@@ -1,33 +1,26 @@
-export default function Avatar({ src, name, size = 48, onClick }) {
-  const initial = (name || "?").charAt(0).toUpperCase();
-  const colors = ["#06B6D4", "#22C55E", "#F59E0B", "#EF4444", "#F6C000", "#94A3B8", "#1D1940"];
+export default function Avatar({ src, name, size = 40, onClick }) {
+  const colors = [
+    "#06B6D4", "#0EA5E9", "#22C55E", "#F59E0B",
+    "#EF4444", "#8B5CF6", "#EC4899",
+  ];
   const colorIndex = (name || "").length % colors.length;
-  const bgColor = colors[colorIndex];
+  const bg = colors[colorIndex];
+  const initial = (name || "?").charAt(0).toUpperCase();
+  const Component = onClick ? "button" : "div";
 
   return (
-    <div
+    <Component
       onClick={onClick}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") onClick(e); } : undefined}
-      className="flex-shrink-0 rounded-full overflow-hidden ripple"
+      className="rounded-full overflow-hidden flex-shrink-0 ring-2 ring-border hover:ring-primary/30 transition-all duration-200 active:scale-95"
       style={{ width: size, height: size }}
     >
       {src ? (
-        <img
-          src={src}
-          alt={name || "avatar"}
-          className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-        />
+        <img src={src} alt={name || ""} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
       ) : (
-        <div
-          className="w-full h-full flex items-center justify-center text-white font-semibold"
-          style={{ background: bgColor, fontSize: size * 0.4 }}
-        >
+        <div className="w-full h-full flex items-center justify-center text-white font-semibold text-[15px] select-none" style={{ background: bg }}>
           {initial}
         </div>
       )}
-    </div>
+    </Component>
   );
 }

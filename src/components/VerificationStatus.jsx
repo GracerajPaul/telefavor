@@ -1,130 +1,119 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useToast } from "../components/Toast";
+import { useToast } from "./Toast";
 import { generateVerificationCode, checkVerification } from "../services/database";
+import Icon from "./Icon";
+
+const POLL_INTERVAL = 3000;
+const CODE_EXPIRY = 10 * 60 * 1000;
 
 export default function VerificationStatus({ onVerified, autoGenerate }) {
-  const { user: fbUser, profile, refreshProfile } = useAuth();
+  const { user: fbUser } = useAuth();
   const toast = useToast();
-  const [step, setStep] = useState("idle");
-  const [code, setCode] = useState("");
-  const [expiresAt, setExpiresAt] = useState(null);
-  const [timeLeft, setTimeLeft] = useState("");
-  const [verifying, setVerifying] = useState(false);
-  const autoTriggered = useRef(false);
+  const [state, setState] = useState("idle");
+  const [code, setCode] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const pollRef = useRef(null);
 
-  const isVerified = profile?.telegram_verified;
-
-  useEffect(() => {
-    if (isVerified) setStep("done");
-  }, [isVerified]);
-
-  useEffect(() => {
-    if (autoGenerate && !autoTriggered.current && !isVerified && fbUser && profile?.telegram_username) {
-      autoTriggered.current = true;
-      setVerifying(true);
-      (async () => {
-        try {
-          const result = await generateVerificationCode(fbUser.id, profile.telegram_username);
-          setCode(result.code);
-          setExpiresAt(new Date(result.expires_at));
-          setStep("waiting");
-        } catch (err) {
-          toast("Failed: " + (err.message || "unknown error"), "error");
-        } finally {
-          setVerifying(false);
+  const startPolling = useCallback(async () => {
+    if (!fbUser) return;
+    const check = async () => {
+      try {
+        const result = await checkVerification(fbUser.id);
+        if (result) {
+          clearInterval(pollRef.current);
+          setState("done");
+          onVerified?.();
         }
-      })();
+      } catch {}
+    };
+    check();
+    pollRef.current = setInterval(check, POLL_INTERVAL);
+  }, [fbUser, onVerified]);
+
+  useEffect(() => {
+    if (autoGenerate) handleGenerate();
+  }, []);
+
+  useEffect(() => {
+    if (state === "waiting") {
+      const interval = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            clearInterval(pollRef.current);
+            setState("expired");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
     }
-  }, [autoGenerate, isVerified, fbUser, profile?.telegram_username, toast]);
+  }, [state]);
+
+  useEffect(() => {
+    return () => clearInterval(pollRef.current);
+  }, []);
 
   const handleGenerate = async () => {
-    if (!fbUser || !profile?.telegram_username) return;
-    setVerifying(true);
+    if (!fbUser) return;
     try {
-      const result = await generateVerificationCode(fbUser.id, profile.telegram_username);
-      setCode(result.code);
-      setExpiresAt(new Date(result.expires_at));
-      setStep("waiting");
-    } catch (err) {
-      toast("Failed: " + (err.message || "unknown error"), "error");
-    } finally {
-      setVerifying(false);
+      const data = await generateVerificationCode(fbUser.id, fbUser.telegram_username || "");
+      setCode(data.code);
+      setTimeLeft(Math.floor(CODE_EXPIRY / 1000));
+      setState("waiting");
+      startPolling();
+    } catch {
+      toast("Failed to generate code", "error");
     }
   };
 
-  useEffect(() => {
-    if (step !== "waiting") return;
-    const interval = setInterval(async () => {
-      if (!fbUser) return;
-      const result = await checkVerification(fbUser.id);
-      if (result?.verified) {
-        setStep("done");
-        await refreshProfile();
-        toast("Telegram account verified!");
-        onVerified?.();
-        clearInterval(interval);
-      }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [step, fbUser, refreshProfile, toast, onVerified]);
+  const formatTime = (s) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+  };
 
-  useEffect(() => {
-    if (!expiresAt) return;
-    const tick = () => {
-      const diff = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
-      setTimeLeft(`${Math.floor(diff / 60)}:${String(diff % 60).padStart(2, "0")}`);
-      if (diff <= 0) setStep("expired");
-    };
-    tick();
-    const interval = setInterval(tick, 1000);
-    return () => clearInterval(interval);
-  }, [expiresAt]);
-
-  if (step === "done" || isVerified) {
+  if (state === "done") {
     return (
-      <div className="flex items-center gap-2 text-[13px] text-[#22C55E]">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#22C55E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-green-soft text-green text-[13px] font-medium">
+        <Icon name="verified" size={18} />
         Verified Telegram Account
       </div>
     );
   }
 
-  if (step === "expired") {
+  if (state === "waiting" && code) {
     return (
       <div className="space-y-3">
-        <p className="text-[13px] text-[#EF4444]">Code expired. Generate a new one.</p>
-        <button onClick={handleGenerate} disabled={verifying} className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#0EA5E9] text-white text-[12px] font-medium disabled:opacity-50 active:scale-95 transition-all">
-          {verifying ? "Generating..." : "Generate New Code"}
-        </button>
+        <div className="text-center">
+          <p className="text-[28px] font-bold tracking-[6px] text-primary font-mono">{code}</p>
+          <p className="text-[11px] text-text-muted mt-1.5">Expires in {formatTime(timeLeft)}</p>
+        </div>
+        <p className="text-[12px] text-text-secondary text-center leading-relaxed">
+          Send this code to{' '}
+          <a href="https://t.me/TelefavorVerificationBot" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+            @TelefavorVerificationBot
+          </a>
+        </p>
       </div>
     );
   }
 
-  if (step === "waiting") {
+  if (state === "expired") {
     return (
-      <div className="space-y-3">
-        <p className="text-[13px] text-[#94A3B8]">Send the code below to <a href="https://t.me/TelefavorVerificationBot" target="_blank" rel="noopener noreferrer" className="text-[#06B6D4] hover:underline font-semibold">@TelefavorVerificationBot</a> on Telegram:</p>
-        <div className="bg-[#0D0B1A] rounded-xl p-4 text-center border border-[#1E1B3A]">
-          <span className="text-[24px] font-bold text-[#06B6D4] tracking-widest font-mono">{code}</span>
-        </div>
-        <div className="flex items-center justify-between text-[12px] text-[#94A3B8]">
-          <span>Expires in: <span className="text-white font-mono">{timeLeft}</span></span>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-[#06B6D4] animate-pulse" />
-            <span>Waiting for verification...</span>
-          </div>
-        </div>
-        <button onClick={() => setStep("idle")} className="text-[12px] text-[#5A5A7A] hover:text-[#94A3B8] transition-colors">Cancel</button>
-      </div>
+      <button onClick={handleGenerate} className="w-full py-2.5 rounded-xl bg-bg-elevated text-text-secondary text-[13px] font-medium hover:text-text hover:bg-border transition-all active:scale-[0.98]">
+        Generate New Code
+      </button>
     );
   }
 
   return (
-    <button onClick={handleGenerate} disabled={verifying} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0D0B1A] border border-[#1E1B3A] text-[12px] text-[#94A3B8] hover:border-[#06B6D4]/30 hover:text-white transition-all disabled:opacity-50">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 11.5C21 16.1944 17.1944 20 12.5 20C9.38924 20 6.68673 18.1871 5.26782 15.5M3 12.5C3 7.80558 6.80558 4 11.5 4C14.6108 4 17.3133 5.81288 18.7322 8.5" stroke="#06B6D4" strokeWidth="2" strokeLinecap="round"/><path d="M22 6V10H18M2 18V14H6" stroke="#06B6D4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-      {verifying ? "Generating..." : "Verify Telegram"}
+    <button onClick={handleGenerate} className="w-full py-2.5 rounded-xl bg-primary text-white text-[13px] font-semibold hover:bg-primary-hover transition-all active:scale-[0.98] shadow-lg shadow-primary-glow/20 flex items-center justify-center gap-2">
+      <Icon name="telegram" size={16} />
+      Verify Telegram
     </button>
   );
 }

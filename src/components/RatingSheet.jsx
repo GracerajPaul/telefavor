@@ -1,52 +1,42 @@
-import { useState } from "react";
+"use client";
 import BottomSheet from "./BottomSheet";
+import Icon from "./Icon";
 
-export default function RatingSheet({
-  isOpen,
-  onClose,
-  username,
-  onRate,
-  onSkip,
-  loading,
-}) {
-  const handleRate = async (result) => {
-    await onRate(result);
-  };
-
+export default function RatingSheet({ isOpen, onClose, username, onRate, onSkip, loading }) {
   return (
-    <BottomSheet isOpen={isOpen} onClose={onClose}>
-      <div className="text-center space-y-2 mb-6">
-        <p className="text-[17px] font-semibold text-white">
-          How was your swap with @{username}?
-        </p>
-        <p className="text-[13px] text-[#94A3B8]">
-          Your rating builds their trust score
-        </p>
-      </div>
-
+    <BottomSheet isOpen={isOpen} onClose={onClose} title="Rate this swap">
       <div className="space-y-3">
+        <p className="text-[13px] text-text-secondary leading-relaxed">
+          How was your swap with <span className="text-text font-medium">@{username}</span>?
+        </p>
         <button
-          onClick={() => handleRate("green")}
+          onClick={() => onRate("green")}
           disabled={loading}
-          className="ripple w-full py-4 rounded-xl bg-[#22C55E] text-white text-[16px] font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl bg-green-soft text-green font-semibold text-[14px] hover:bg-green-soft/20 transition-all active:scale-[0.98] disabled:opacity-50"
         >
-          <span className="text-[20px]">🟢</span> Successful Swap
+          <div className="w-8 h-8 rounded-lg bg-green flex items-center justify-center">
+            <Icon name="thumbsUp" size={18} className="text-white" />
+          </div>
+          Successful Swap
         </button>
         <button
-          onClick={() => handleRate("red")}
+          onClick={() => onRate("red")}
           disabled={loading}
-          className="ripple w-full py-4 rounded-xl bg-[#EF4444] text-white text-[16px] font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl bg-red-soft text-red font-semibold text-[14px] hover:bg-red-soft/20 transition-all active:scale-[0.98] disabled:opacity-50"
         >
-          <span className="text-[20px]">🔴</span> Not Successful
+          <div className="w-8 h-8 rounded-lg bg-red flex items-center justify-center">
+            <Icon name="x" size={18} className="text-white" />
+          </div>
+          Not Successful
+        </button>
+        <button
+          onClick={onSkip}
+          disabled={loading}
+          className="w-full text-center py-3 text-[13px] text-text-muted hover:text-text-secondary transition-colors"
+        >
+          Skip
         </button>
       </div>
-
-      <button
-        onClick={onSkip}
-        className="w-full text-center text-[14px] text-[#94A3B8] py-4 mt-2 ripple rounded-xl"
-      >
-        Skip
-      </button>
     </BottomSheet>
   );
 }

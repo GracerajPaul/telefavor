@@ -1,61 +1,40 @@
 "use client";
 import { useRef } from "react";
 import { LISTING_TITLES } from "../services/database";
+import Icon from "./Icon";
 
 export default function CategoryChips({ selected, onSelect }) {
   const scrollRef = useRef(null);
 
   const scroll = (dir) => {
     if (!scrollRef.current) return;
-    const amount = 200;
-    scrollRef.current.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+    scrollRef.current.scrollBy({ left: dir * 200, behavior: "smooth" });
   };
 
+  const chips = ["All", ...LISTING_TITLES];
+
   return (
-    <div className="flex items-center gap-2">
-      <button
-        onClick={() => scroll("left")}
-        className="flex-shrink-0 w-8 h-8 rounded-full bg-[#151230] border border-[#1E1B3A] flex items-center justify-center text-[#94A3B8] hover:text-white hover:bg-[#1D1940] transition-all active:scale-90"
-        aria-label="Scroll left"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    <div className="relative group">
+      <button onClick={() => scroll(-1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-bg-card border border-border items-center justify-center hidden group-hover:flex hover:bg-bg-elevated transition-all shadow-lg">
+        <Icon name="chevronLeft" size={16} />
       </button>
-      <div ref={scrollRef} className="flex gap-2 overflow-x-auto scrollbar-hide flex-1 py-1">
-        <button
-          onClick={() => onSelect("All")}
-          aria-pressed={selected === "All"}
-          className={`ripple flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 active:scale-95 ${
-            selected === "All"
-              ? "bg-[#06B6D4] text-white shadow-lg shadow-[#06B6D4]/30"
-              : "bg-[#151230] text-[#94A3B8] hover:bg-[#1D1940]"
-          }`}
-        >
-          All
-        </button>
-        {LISTING_TITLES.map((title) => {
-          const active = selected === title;
-          return (
-            <button
-              key={title}
-              onClick={() => onSelect(title)}
-              aria-pressed={active}
-              className={`ripple flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 active:scale-95 ${
-                active
-                  ? "bg-[#06B6D4] text-white shadow-lg shadow-[#06B6D4]/30"
-                  : "bg-[#151230] text-[#94A3B8] hover:bg-[#1D1940]"
-              }`}
-            >
-              {title}
-            </button>
-          );
-        })}
+      <div ref={scrollRef} className="flex gap-2 overflow-x-auto scrollbar-hide py-1">
+        {chips.map((chip) => (
+          <button
+            key={chip}
+            onClick={() => onSelect(chip === "All" ? "" : chip)}
+            className={`flex-shrink-0 px-3.5 py-2 rounded-xl text-[13px] font-medium transition-all duration-200 active:scale-95 ${
+              selected === chip || (!selected && chip === "All")
+                ? "bg-primary text-white shadow-lg shadow-primary-glow/30"
+                : "bg-bg-elevated text-text-secondary hover:text-text hover:bg-border"
+            }`}
+          >
+            {chip}
+          </button>
+        ))}
       </div>
-      <button
-        onClick={() => scroll("right")}
-        className="flex-shrink-0 w-8 h-8 rounded-full bg-[#151230] border border-[#1E1B3A] flex items-center justify-center text-[#94A3B8] hover:text-white hover:bg-[#1D1940] transition-all active:scale-90"
-        aria-label="Scroll right"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      <button onClick={() => scroll(1)} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-bg-card border border-border items-center justify-center hidden group-hover:flex hover:bg-bg-elevated transition-all shadow-lg">
+        <Icon name="chevronRight" size={16} />
       </button>
     </div>
   );

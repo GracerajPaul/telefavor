@@ -10,6 +10,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../components/Toast";
 import { signOut } from "../../../services/auth";
 import { updateUser, getUserListings, updateDescription } from "../../../services/database";
+import Icon from "../../../components/Icon";
 
 export default function MyProfilePage() {
   const router = useRouter();
@@ -64,13 +65,12 @@ export default function MyProfilePage() {
 
   return (
     <div className="animate-fadeIn">
-      <div className="mb-8">
-        <h1 className="text-[28px] font-bold text-white">My <span className="text-[#06B6D4]">Profile</span></h1>
-        <p className="text-[#94A3B8] text-[15px] mt-1">Manage your account, view your trust score, and track listing history.</p>
+      <div className="mb-6">
+        <h1 className="text-[24px] font-bold text-text">My Profile</h1>
+        <p className="text-text-secondary text-[14px] mt-1">Manage your account and track your reputation</p>
       </div>
 
-      {/* Profile Card */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 md:p-5 mb-4">
+      <div className="bg-bg-card rounded-xl border border-border p-4 md:p-5 mb-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex items-start gap-4 sm:flex-col sm:items-center">
             <Avatar src={profile.photo_url} name={profile.display_name} size={48} />
@@ -78,122 +78,117 @@ export default function MyProfilePage() {
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="text-[18px] md:text-[20px] font-bold text-white truncate">{profile.display_name || "Unknown"}</h2>
+                <h2 className="text-[18px] md:text-[20px] font-bold text-text truncate">{profile.display_name || "Unknown"}</h2>
                 <div className="flex flex-wrap items-center gap-2 mt-0.5">
-                  <span className="text-[#06B6D4] text-[13px] md:text-[14px] font-medium truncate">@{profile.telegram_username || "not set"}</span>
+                  <span className="text-primary text-[13px] md:text-[14px] font-medium truncate">@{profile.telegram_username || "not set"}</span>
                   {profile.telegram_verified && (
-                    <span className="text-[11px] text-[#22C55E] font-medium">✓ Verified</span>
+                    <span className="text-[11px] text-green font-medium">✓ Verified</span>
                   )}
                 </div>
               </div>
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <Badge level={null} score={profile.trust_score} ratingsCount={totalRatings} />
                 {totalRatings > 0 ? (
-                  <span className="text-[12px] text-[#94A3B8]">{profile.green_ratings || 0}/{totalRatings}</span>
+                  <span className="text-[12px] text-text-muted">{profile.green_ratings || 0}/{totalRatings}</span>
                 ) : (
-                  <span className="text-[12px] text-[#5A5A7A]">No ratings</span>
+                  <span className="text-[12px] text-text-tertiary">No ratings</span>
                 )}
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[12px] text-[#94A3B8]">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-[12px] text-text-muted">
               <span>Joined {profile.created_at ? new Date(profile.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "recently"}</span>
-              <span className="text-[#1E1B3A]">·</span>
+              <span className="text-border">·</span>
               <span>{listings.length} listing{listings.length !== 1 ? "s" : ""}</span>
             </div>
             <div className="flex gap-2 mt-2 flex-wrap">
-              <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-white">{profile.total_listings_posted || 0}</p>
-                <p className="text-[9px] text-[#94A3B8]">Posts</p>
+              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
+                <p className="text-[14px] md:text-[15px] font-bold text-text">{profile.total_listings_posted || 0}</p>
+                <p className="text-[9px] text-text-muted">Posts</p>
               </div>
-              <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-[#22C55E]">{profile.green_ratings || 0}</p>
-                <p className="text-[9px] text-[#94A3B8]">Green</p>
+              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
+                <p className="text-[14px] md:text-[15px] font-bold text-green">{profile.green_ratings || 0}</p>
+                <p className="text-[9px] text-text-muted">Green</p>
               </div>
-              <div className="text-center px-2.5 py-1 rounded-lg bg-[#0D0B1A] min-w-[52px]">
-                <p className="text-[14px] md:text-[15px] font-bold text-[#EF4444]">{profile.red_ratings || 0}</p>
-                <p className="text-[9px] text-[#94A3B8]">Red</p>
+              <div className="text-center px-2.5 py-1 rounded-lg bg-bg-inset min-w-[52px]">
+                <p className="text-[14px] md:text-[15px] font-bold text-red">{profile.red_ratings || 0}</p>
+                <p className="text-[9px] text-text-muted">Red</p>
               </div>
             </div>
             {editingDesc ? (
-              <div className="mt-3 pt-3 border-t border-[#1E1B3A] space-y-2">
+              <div className="mt-3 pt-3 border-t border-border space-y-2">
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Tell others about yourself..."
-                  className="w-full bg-[#0D0B1A] text-white text-[12px] rounded-xl p-3 outline-none border border-transparent focus:border-[#06B6D4] transition-colors resize-none h-20 placeholder:text-[#94A3B8]"
+                  className="w-full bg-bg-inset text-text text-[12px] rounded-xl p-3 outline-none border border-border focus:border-primary transition-colors resize-none h-20 placeholder:text-text-muted"
                   maxLength={300}
                   autoFocus
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-[#94A3B8]">{description.length}/300</span>
+                  <span className="text-[11px] text-text-muted">{description.length}/300</span>
                   <div className="flex gap-2">
-                    <button onClick={() => setEditingDesc(false)} className="px-3 py-1 rounded-lg bg-[#0D0B1A] text-[#94A3B8] text-[11px] font-medium hover:bg-[#1D1940] transition-colors">Cancel</button>
-                    <button onClick={handleSaveDescription} disabled={savingDesc} className="px-3 py-1 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#0EA5E9] text-white text-[11px] font-medium disabled:opacity-50 active:scale-95 transition-all">{savingDesc ? "Saving..." : "Save"}</button>
+                    <button onClick={() => setEditingDesc(false)} className="px-3 py-1 rounded-lg bg-bg-inset text-text-muted text-[11px] font-medium hover:bg-bg-elevated transition-colors">Cancel</button>
+                    <button onClick={handleSaveDescription} disabled={savingDesc} className="px-3 py-1 rounded-lg bg-primary text-white text-[11px] font-medium disabled:opacity-50 active:scale-95 transition-all">{savingDesc ? "Saving..." : "Save"}</button>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="flex items-start justify-between gap-4 mt-3 pt-3 border-t border-[#1E1B3A]">
-                <p className={`text-[13px] leading-relaxed ${profile.description ? "text-[#94A3B8]" : "text-[#5A5A7A] italic"}`}>
+              <div className="flex items-start justify-between gap-4 mt-3 pt-3 border-t border-border">
+                <p className={`text-[13px] leading-relaxed ${profile.description ? "text-text-secondary" : "text-text-tertiary italic"}`}>
                   {profile.description || "No description set"}
                 </p>
-                <button onClick={() => { setDescription(profile.description || ""); setEditingDesc(true); }} className="flex-shrink-0 text-[#06B6D4] text-[11px] font-medium hover:underline mt-0.5">Edit</button>
+                <button onClick={() => { setDescription(profile.description || ""); setEditingDesc(true); }} className="flex-shrink-0 text-primary text-[11px] font-medium hover:underline mt-0.5">Edit</button>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Trust Score */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 mb-4">
-        <h3 className="text-[11px] text-[#94A3B8] font-medium uppercase tracking-wider mb-3">Trust Score</h3>
+      <div className="bg-bg-card rounded-xl border border-border p-4 mb-4">
+        <h3 className="text-[11px] text-text-muted font-medium uppercase tracking-wider mb-3">Trust Score</h3>
         <TrustScoreSection userData={profile} size="large" />
       </div>
 
-      {/* Listing History */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 mb-4">
-        <h3 className="text-[11px] text-[#94A3B8] font-medium uppercase tracking-wider mb-3">Listings ({listings.length})</h3>
+      <div className="bg-bg-card rounded-xl border border-border p-4 mb-4">
+        <h3 className="text-[11px] text-text-muted font-medium uppercase tracking-wider mb-3">Listings ({listings.length})</h3>
         {loadingListings ? <div className="flex justify-center py-4"><div className="spinner" /></div>
-        : listings.length === 0 ? <p className="text-[13px] text-[#5A5A7A] italic">No listings yet</p>
+        : listings.length === 0 ? <p className="text-[13px] text-text-tertiary italic">No listings yet</p>
         : <div className="space-y-2">
           {listings.map((l) => (
-            <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0D0B1A] border border-[#1E1B3A] hover:border-[#06B6D4]/30 transition-colors">
+            <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-bg-inset border border-border hover:border-primary/30 transition-colors">
               <div className="min-w-0 flex-1">
-                <p className="text-[14px] text-white font-medium">{l.title}</p>
-                {l.message && <p className="text-[12px] text-[#94A3B8] mt-1 leading-relaxed">{l.message}</p>}
-                <div className="flex items-center gap-3 mt-1.5 text-[11px] text-[#5A5A7A]">
+                <p className="text-[14px] text-text font-medium">{l.title}</p>
+                {l.message && <p className="text-[12px] text-text-secondary mt-1 leading-relaxed">{l.message}</p>}
+                <div className="flex items-center gap-3 mt-1.5 text-[11px] text-text-tertiary">
                   <span>{l.posted_at ? new Date(l.posted_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : ""}</span>
-                  <span className="text-[#1E1B3A]">|</span>
+                  <span className="text-border">|</span>
                   <span>@{l.telegram_username || profile.telegram_username}</span>
                 </div>
               </div>
-              <span className={`text-[11px] px-2.5 py-1 rounded-full font-medium ml-3 flex-shrink-0 ${l.is_active ? "bg-[#22C55E]/15 text-[#22C55E]" : "bg-[#94A3B8]/15 text-[#94A3B8]"}`}>{l.is_active ? "Active" : "Expired"}</span>
+              <span className={`text-[11px] px-2.5 py-1 rounded-full font-medium ml-3 flex-shrink-0 ${l.is_active ? "bg-green/15 text-green" : "bg-text-muted/15 text-text-muted"}`}>{l.is_active ? "Active" : "Expired"}</span>
             </div>
           ))}
         </div>}
       </div>
 
-      {/* Settings */}
-      <div className="bg-[#151230] rounded-xl border border-[#1E1B3A] p-4 mb-4">
-        <h3 className="text-[11px] text-[#94A3B8] font-medium uppercase tracking-wider mb-3">Settings</h3>
+      <div className="bg-bg-card rounded-xl border border-border p-4 mb-4">
+        <h3 className="text-[11px] text-text-muted font-medium uppercase tracking-wider mb-3">Settings</h3>
         <div className="space-y-1">
-          <button onClick={() => router.push(`/user/${fbUser.id}`)} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-[#0D0B1A] transition-colors">
-            <span className="text-[14px] text-white">View Public Profile</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/></svg>
+          <button onClick={() => router.push(`/user/${fbUser.id}`)} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-bg-inset transition-colors">
+            <span className="text-[14px] text-text">View Public Profile</span>
+            <Icon name="chevron-right" size={14} className="text-text-muted" />
           </button>
           {profile.telegram_verified ? (
             <div className="flex items-center justify-between px-3 py-3 rounded-xl cursor-default">
-              <span className="text-[14px] text-[#22C55E] flex items-center gap-2">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#22C55E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <span className="text-[14px] text-green flex items-center gap-2">
+                <Icon name="check" size={16} className="text-green" />
                 Verified Telegram
               </span>
             </div>
           ) : profile.premium_verified ? (
             <div className="flex items-center justify-between px-3 py-3 rounded-xl cursor-default">
-              <span className="text-[14px] text-[#F6C000] flex items-center gap-2">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#F6C000" stroke="#F6C000" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <span className="text-[14px] text-yellow flex items-center gap-2">
+                <Icon name="star" size={16} className="text-yellow" />
                 Premium Member
               </span>
             </div>
@@ -202,40 +197,39 @@ export default function MyProfilePage() {
               <VerificationStatus />
             </div>
           )}
-          <button onClick={() => { setUsernameInput(profile.telegram_username || ""); setEditingUsername(true); }} disabled={!!profile.telegram_verified && !profile.premium_verified} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-[#0D0B1A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-            <span className="text-[14px] text-white">{profile.telegram_verified && !profile.premium_verified ? "Username Locked" : "Edit Username"}</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/></svg>
+          <button onClick={() => { setUsernameInput(profile.telegram_username || ""); setEditingUsername(true); }} disabled={!!profile.telegram_verified && !profile.premium_verified} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-bg-inset transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            <span className="text-[14px] text-text">{profile.telegram_verified && !profile.premium_verified ? "Username Locked" : "Edit Username"}</span>
+            <Icon name="chevron-right" size={14} className="text-text-muted" />
           </button>
-          <button onClick={handleSignOut} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-[#0D0B1A] transition-colors">
-            <span className="text-[14px] text-[#EF4444]">Sign Out</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="#EF4444" strokeWidth="2" strokeLinecap="round"/><path d="M16 17L21 12L16 7" stroke="#EF4444" strokeWidth="2" strokeLinecap="round"/><path d="M21 12H9" stroke="#EF4444" strokeWidth="2" strokeLinecap="round"/></svg>
+          <button onClick={handleSignOut} className="ripple w-full flex items-center justify-between px-3 py-3 rounded-xl text-left hover:bg-bg-inset transition-colors">
+            <span className="text-[14px] text-red">Sign Out</span>
+            <Icon name="log-out" size={14} className="text-red" />
           </button>
         </div>
       </div>
 
-      <div className="text-center text-[12px] text-[#94A3B8] space-y-1">
+      <div className="text-center text-[12px] text-text-muted">
         <div className="flex items-center justify-center gap-4">
-          <button onClick={() => router.push("/features")} className="hover:text-white transition-colors">Features</button>
-          <span className="text-[#1E1B3A]">·</span>
-          <button onClick={() => router.push("/community")} className="hover:text-white transition-colors">Community</button>
-          <span className="text-[#1E1B3A]">·</span>
-          <button onClick={() => router.push("/terms")} className="hover:text-white transition-colors">Terms</button>
+          <button onClick={() => router.push("/features")} className="hover:text-text-secondary transition-colors">Features</button>
+          <span className="text-border">·</span>
+          <button onClick={() => router.push("/community")} className="hover:text-text-secondary transition-colors">Community</button>
+          <span className="text-border">·</span>
+          <button onClick={() => router.push("/terms")} className="hover:text-text-secondary transition-colors">Terms</button>
         </div>
       </div>
 
-      {/* Edit Username Modal */}
       {editingUsername && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 animate-fadeIn" onClick={() => setEditingUsername(false)} />
-          <div className="relative w-full max-w-md bg-[#151230] rounded-2xl p-6 animate-scaleIn border border-[#1E1B3A] shadow-2xl">
-            <h2 className="text-[17px] font-semibold text-white mb-4">Edit Username</h2>
+          <div className="relative w-full max-w-sm bg-bg-card rounded-2xl p-6 animate-scaleIn border border-border shadow-2xl">
+            <h2 className="text-[17px] font-semibold text-text mb-4">Edit Username</h2>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94A3B8] text-[16px]">@</span>
-              <input type="text" value={usernameInput} onChange={(e) => setUsernameInput(e.target.value)} placeholder="username" className="w-full bg-[#1A1A30] text-white text-[16px] rounded-xl pl-8 pr-4 py-3 outline-none border border-transparent focus:border-[#06B6D4] transition-colors" autoFocus />
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-[15px]">@</span>
+              <input type="text" value={usernameInput} onChange={(e) => setUsernameInput(e.target.value)} placeholder="username" className="w-full bg-bg-inset text-text text-[15px] rounded-xl pl-8 pr-4 py-3 outline-none border border-border focus:border-primary transition-colors" autoFocus />
             </div>
             <div className="flex gap-3 mt-4">
-              <button onClick={() => setEditingUsername(false)} className="flex-1 py-3 rounded-xl bg-[#1A1A30] text-[#94A3B8] text-[14px] font-medium hover:bg-[#1D1940] transition-colors active:scale-95">Cancel</button>
-              <button onClick={handleSaveUsername} disabled={savingUsername || !usernameInput.trim()} className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#06B6D4] to-[#0EA5E9] text-white text-[14px] font-medium disabled:opacity-50 active:scale-95 transition-all hover:shadow-lg hover:shadow-[#06B6D4]/30">{savingUsername ? "Saving..." : "Save"}</button>
+              <button onClick={() => setEditingUsername(false)} className="flex-1 py-3 rounded-xl bg-bg-elevated text-text-muted text-[14px] font-medium hover:text-text hover:bg-border transition-colors active:scale-95">Cancel</button>
+              <button onClick={handleSaveUsername} disabled={savingUsername || !usernameInput.trim()} className="flex-1 py-3 rounded-xl bg-primary text-white text-[14px] font-medium disabled:opacity-50 active:scale-95 transition-all">{savingUsername ? "Saving..." : "Save"}</button>
             </div>
           </div>
         </div>
