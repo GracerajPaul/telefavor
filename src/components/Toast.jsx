@@ -1,6 +1,5 @@
 "use client";
 import { createContext, useContext, useState, useCallback } from "react";
-import Icon from "./Icon";
 
 const ToastContext = createContext(null);
 export const useToast = () => useContext(ToastContext);
@@ -19,15 +18,11 @@ export default function ToastProvider({ children }) {
       {children}
       <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 items-center pointer-events-none">
         {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={`pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-lg border text-[13px] font-medium animate-fadeIn ${
-              t.type === "error"
-                ? "bg-bg-dark border-red/30 text-red"
-                : "bg-bg-dark border-border text-text"
-            }`}
-          >
-            <Icon name={t.type === "error" ? "x" : "check"} size={14} className={t.type === "error" ? "text-red" : "text-green"} />
+          <div key={t.id}
+            className={`pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-full border text-[13px] font-medium transition-all ${t.type === "error" ? "bg-bg border-red/40 text-red" : "bg-bg border-border text-text"}`}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {t.type === "error" ? <><circle cx="12" cy="12" r="9" /><path d="M12 8v4M12 16h.01" /></> : <path d="M20 6L9 17l-5-5" />}
+            </svg>
             {t.message}
           </div>
         ))}

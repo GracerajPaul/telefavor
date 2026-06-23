@@ -5,7 +5,6 @@ import Avatar from "../../../components/Avatar";
 import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../components/Toast";
 import { LISTING_TITLES, createListing, deactivateListing, getUserActiveListing, updateUser } from "../../../services/database";
-import Icon from "../../../components/Icon";
 
 const URL_REGEX = /https?:\/\/[^\s]+|www\.[^\s]+/i;
 const MAX_MESSAGE_LENGTH = 500;
@@ -63,17 +62,17 @@ export default function PostListingPage() {
   if (fetching) return <div className="flex justify-center py-20"><div className="spinner" /></div>;
 
   return (
-    <div className="animate-fadeIn" style={{ marginBottom: "250px" }}>
+    <div>
       <div className="mb-8">
-        <h1 className="text-[26px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>Post a Listing</h1>
-        <p className="text-text-secondary text-[13px] mt-1.5">Create a new referral exchange listing. Active for 24 hours.</p>
+        <h1 className="text-[22px] font-semibold text-text">Post a Listing</h1>
+        <p className="text-text-muted text-[13px] mt-0.5">Create a new referral exchange listing. Active for 24 hours.</p>
       </div>
 
       {existingListing && (
         <div className="mb-5 p-4 rounded-xl bg-bg-card border border-border">
           <p className="text-[12px] text-text-muted">You already have an active listing:</p>
           <p className="text-[13px] text-text mt-1 font-medium">{existingListing.title}</p>
-          <button onClick={handleDeleteAndRepost} disabled={loading} className="mt-2 text-red text-[12px] font-medium hover:underline transition-colors">Delete and Repost</button>
+          <button onClick={handleDeleteAndRepost} disabled={loading} className="mt-2 text-red text-[12px] font-medium hover:underline">Delete and Repost</button>
         </div>
       )}
 
@@ -83,13 +82,12 @@ export default function PostListingPage() {
             <label className="text-[12px] text-text-muted font-medium block mb-3">Select Listing Type</label>
             <div className="space-y-1 max-h-[400px] overflow-y-auto pr-1">
               {LISTING_TITLES.map((title) => (
-                <button key={title} onClick={() => setSelectedTitle(title)} className={`w-full text-left px-3.5 py-2.5 rounded-lg text-[13px] transition-colors border ${selectedTitle === title ? "bg-primary-soft text-primary border-primary/30" : "bg-bg-inset text-text border-border hover:bg-bg-hover"}`}>
-                  <div className="flex items-center gap-2.5">
-                    <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${selectedTitle === title ? "bg-primary border-primary" : "border-border"}`}>
-                      {selectedTitle === title && <Icon name="check" size={10} className="text-white" />}
-                    </div>
-                    {title}
+                <button key={title} onClick={() => setSelectedTitle(title)}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-lg text-[13px] transition-colors border flex items-center gap-2.5 ${selectedTitle === title ? "bg-accent/10 border-accent/30 text-accent" : "bg-bg-card border-border text-text hover:bg-bg-hover"}`}>
+                  <div className={`w-4 h-4 rounded-[4px] border flex items-center justify-center flex-shrink-0 transition-colors ${selectedTitle === title ? "bg-accent border-accent" : "border-border"}`}>
+                    {selectedTitle === title && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round"><path d="M20 6L9 17l-5-5" /></svg>}
                   </div>
+                  {title}
                 </button>
               ))}
             </div>
@@ -102,13 +100,9 @@ export default function PostListingPage() {
               <label className="text-[12px] text-text-muted font-medium">Describe your referral</label>
               <span className="text-[10px] text-text-muted">{message.length}/{MAX_MESSAGE_LENGTH}</span>
             </div>
-            <textarea
-              value={message}
-              onChange={handleMessageChange}
+            <textarea value={message} onChange={handleMessageChange}
               placeholder="Tell others about this referral..."
-              className="w-full bg-bg-inset text-text text-[13px] rounded-lg p-3 outline-none border transition-colors resize-none h-32 placeholder:text-text-muted focus:border-primary"
-              style={{ borderColor: linkError ? "var(--red)" : "var(--border)" }}
-            />
+              className={`w-full bg-bg-card text-text text-[13px] rounded-lg p-3 outline-none border resize-none h-32 placeholder:text-text-muted focus:border-accent transition-colors ${linkError ? "border-red" : "border-border"}`} />
             {linkError && <p className="text-red text-[11px] mt-1.5">{linkError}</p>}
           </div>
 
@@ -117,21 +111,15 @@ export default function PostListingPage() {
               <Avatar src={profile?.photo_url} name={profile?.display_name} size={32} />
               <div className="min-w-0">
                 <p className="text-[13px] font-semibold text-text truncate">{profile?.display_name || "You"}</p>
-                <p className="text-[11px] text-primary truncate">@{profile?.telegram_username || "username"}</p>
+                <p className="text-[11px] text-accent truncate">@{profile?.telegram_username || "username"}</p>
               </div>
             </div>
-            <button
-              onClick={handleSubmit}
-              disabled={!selectedTitle || loading || !!linkError}
-              className="px-4 py-2 rounded-lg bg-primary text-white text-[12px] font-semibold disabled:opacity-40 transition-opacity hover:bg-primary-hover flex items-center gap-2 flex-shrink-0"
-            >
+            <button onClick={handleSubmit} disabled={!selectedTitle || loading || !!linkError}
+              className="px-4 py-2 rounded-lg bg-accent text-white text-[12px] font-semibold disabled:opacity-40 transition-opacity hover:bg-accent-hover flex items-center gap-2 flex-shrink-0">
               {loading ? (
                 <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                <>
-                  <Icon name="plus" size={12} />
-                  Post Listing
-                </>
+                "Post Listing"
               )}
             </button>
           </div>

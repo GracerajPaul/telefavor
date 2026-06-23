@@ -8,7 +8,6 @@ import { ProfileSkeleton } from "../../../../components/Skeleton";
 import { useAuth } from "../../../../context/AuthContext";
 import { useToast } from "../../../../components/Toast";
 import { getListing, getUser, getRating, createRating } from "../../../../services/database";
-import Icon from "../../../../components/Icon";
 
 export default function ListingDetailPage() {
   const { id } = useParams();
@@ -88,10 +87,10 @@ export default function ListingDetailPage() {
   if (!listing || !poster) return null;
 
   return (
-    <div className="animate-fadeIn" style={{ marginBottom: "250px" }}>
+    <div>
       <div className="mb-8">
-        <h1 className="text-[26px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>Listing Detail</h1>
-        <p className="text-text-secondary text-[13px] mt-1.5">View listing and connect via Telegram</p>
+        <h1 className="text-[22px] font-semibold text-text">Listing Detail</h1>
+        <p className="text-text-muted text-[13px] mt-0.5">View listing and connect via Telegram</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -101,9 +100,9 @@ export default function ListingDetailPage() {
               <Avatar src={poster.photo_url} name={poster.display_name} size={56} onClick={() => router.push(`/user/${listing.user_id}`)} />
               <div className="min-w-0">
                 <h2 className="text-[17px] font-semibold text-text">{poster.display_name || "Unknown"}</h2>
-                <a href={`https://t.me/${listing.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-link text-[13px] hover:text-link-hover">@{listing.telegram_username}</a>
+                <a href={`https://t.me/${listing.telegram_username}`} target="_blank" rel="noopener noreferrer" className="text-accent text-[13px] hover:text-accent-hover">@{listing.telegram_username}</a>
                 <div className="mt-2">
-                  <span className="inline-block px-2 py-0.5 rounded bg-primary-soft text-primary text-[10px] font-medium">{listing.title}</span>
+                  <span className="inline-block px-2 py-0.5 rounded bg-accent/10 text-accent text-[10px] font-medium border border-accent/20">{listing.title}</span>
                 </div>
               </div>
             </div>
@@ -133,12 +132,9 @@ export default function ListingDetailPage() {
                 <span className="text-text">{listing.contact_taps || 0} ×</span>
               </div>
               <div className="border-t border-border pt-3">
-                <button
-                  onClick={handleContact}
-                  disabled={isOwnListing}
-                  className="w-full py-2.5 rounded-lg bg-primary text-white text-[13px] font-semibold disabled:opacity-40 transition-opacity hover:bg-primary-hover flex items-center justify-center gap-2"
-                >
-                  <Icon name="send" size={14} />
+                <button onClick={handleContact} disabled={isOwnListing}
+                  className="w-full py-2.5 rounded-lg bg-accent text-white text-[13px] font-semibold disabled:opacity-40 transition-opacity hover:bg-accent-hover flex items-center justify-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
                   {isOwnListing ? "This is your listing" : "Contact on Telegram"}
                 </button>
                 {!isOwnListing && !alreadyRated && (

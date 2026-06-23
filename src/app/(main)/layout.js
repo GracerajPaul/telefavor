@@ -1,9 +1,9 @@
-\"use client\";
-import { useAuth } from \"../../context/AuthContext\";
-import { useEffect, useRef } from \"react\";
-import { useRouter, usePathname } from \"next/navigation\";
-import Sidebar from \"../../components/Sidebar\";
-import BottomNav from \"../../components/BottomNav\";
+"use client";
+import { useAuth } from "../../context/AuthContext";
+import { useEffect, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import Sidebar from "../../components/Sidebar";
+import BottomNav from "../../components/BottomNav";
 
 export default function MainLayout({ children }) {
   const { isLoggedIn, profile } = useAuth();
@@ -14,32 +14,27 @@ export default function MainLayout({ children }) {
   useEffect(() => {
     if (!isLoggedIn && !redirecting.current) {
       redirecting.current = true;
-      router.replace(\"/\");
+      router.replace("/");
       return;
     }
-    if (profile && !profile.has_onboarded && pathname !== \"/onboarding\" && !redirecting.current) {
+    if (profile && !profile.has_onboarded && pathname !== "/onboarding" && !redirecting.current) {
       redirecting.current = true;
-      router.replace(\"/onboarding\");
+      router.replace("/onboarding");
       return;
     }
-    if (profile && profile.has_onboarded && !profile.telegram_verified && !profile.premium_verified && pathname !== \"/onboarding\" && !redirecting.current) {
+    if (profile && profile.has_onboarded && !profile.telegram_verified && !profile.premium_verified && pathname !== "/onboarding" && !redirecting.current) {
       redirecting.current = true;
-      router.replace(\"/onboarding?verify=1\");
+      router.replace("/onboarding?verify=1");
       return;
     }
     redirecting.current = false;
   }, [isLoggedIn, profile, router, pathname]);
 
   return (
-    <div className=\"min-h-screen\" style={{ background: 'var(--color-bg-dark)' }}>
+    <div className="min-h-screen bg-bg">
       <Sidebar />
-      <div
-        className=\"md:ml-[240px] pb-20 md:pb-0\"
-        style={{ minHeight: '100vh' }}
-      >
-        <div
-          className=\"max-w-4xl mx-auto px-4 md:px-10 py-8 md:py-10\"
-        >
+      <div className="md:ml-[220px] pb-20 md:pb-0 min-h-screen">
+        <div className="max-w-5xl mx-auto px-4 md:px-10 py-8 md:py-10">
           {children}
         </div>
       </div>

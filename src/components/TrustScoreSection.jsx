@@ -6,7 +6,7 @@ export default function TrustScoreSection({ userData, size = "small" }) {
     return (
       <div>
         <div className="flex items-baseline gap-2">
-          <span className="text-[22px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>{userData?.green_ratings || 0}/{total}</span>
+          <span className="text-[22px] font-light text-text">{userData?.green_ratings || 0}/{total}</span>
           <span className="text-[12px] text-text-muted">successful</span>
         </div>
         <p className="text-[11px] text-text-muted mt-1">Needs 3+ ratings to level up</p>
@@ -14,12 +14,12 @@ export default function TrustScoreSection({ userData, size = "small" }) {
     );
   }
 
-  const barColor = score >= 80 ? "var(--green)" : score >= 50 ? "#F59E0B" : "var(--red)";
+  const barColor = score >= 80 ? "#22C55E" : score >= 50 ? "#F59E0B" : "#EF4444";
 
   return (
     <div>
       <div className="flex items-baseline gap-2 mb-2">
-        <span className="text-[28px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>{score}%</span>
+        <span className="text-[28px] font-light text-text">{score}%</span>
         <span className="text-[12px] text-text-muted">Trust Score</span>
       </div>
       <div className="h-1.5 rounded-full bg-border overflow-hidden">

@@ -39,16 +39,7 @@ export default function Icon({ name, size = 20, className = "", ...props }) {
   const path = icons[name];
   if (!path) return null;
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      className={className}
-      {...props}
-    >
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className} {...props}>
       {path}
     </svg>
   );
