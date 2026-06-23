@@ -1,9 +1,14 @@
-"use client";
+\"use client\";
 
 const AVATAR_COLORS = [
-  "#0842A0", "#1a5bb5", "#2d74c9", "#408ddd",
-  "#0d6b3e", "#1a8c54", "#f59e0b", "#d97706",
-  "#9333ea", "#7c3aed", "#dc2626", "#2563eb",
+  [\"#5b8def\", \"#3a6fd4\"],
+  [\"#9b73f0\", \"#7c5cc4\"],
+  [\"#22d3ee\", \"#0ea5c9\"],
+  [\"#34d399\", \"#10b981\"],
+  [\"#f87171\", \"#ef4444\"],
+  [\"#fbbf24\", \"#f59e0b\"],
+  [\"#a78bfa\", \"#8b5cf6\"],
+  [\"#fb923c\", \"#f97316\"],
 ];
 
 function hashColor(name) {
@@ -14,24 +19,31 @@ function hashColor(name) {
 }
 
 export default function Avatar({ src, name, size = 40, onClick }) {
-  const initials = (name || "?")
-    .split(" ")
+  const initials = (name || \"?\")
+    .split(\" \")
     .map((w) => w[0])
-    .join("")
+    .join(\"\")
     .toUpperCase()
     .slice(0, 2);
 
-  const bgColor = hashColor(name);
+  const [c1, c2] = hashColor(name);
+  const fontSize = Math.max(10, size * 0.36);
+
+  const style = {
+    width: size,
+    height: size,
+    flexShrink: 0,
+    borderRadius: '50%',
+    overflow: 'hidden',
+    border: '1.5px solid rgba(255,255,255,0.08)',
+    cursor: onClick ? 'pointer' : 'default',
+    transition: 'all 0.2s ease',
+  };
 
   if (src) {
     return (
-      <button
-        onClick={onClick}
-        disabled={!onClick}
-        className={`rounded-full overflow-hidden border border-border flex-shrink-0 ${onClick ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-default"}`}
-        style={{ width: size, height: size }}
-      >
-        <img src={src} alt={name || ""} className="w-full h-full object-cover" />
+      <button onClick={onClick} disabled={!onClick} style={style}>
+        <img src={src} alt={name || \"\"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </button>
     );
   }
@@ -40,8 +52,18 @@ export default function Avatar({ src, name, size = 40, onClick }) {
     <button
       onClick={onClick}
       disabled={!onClick}
-      className={`rounded-full flex items-center justify-center font-medium text-white flex-shrink-0 ${onClick ? "cursor-pointer hover:opacity-80 transition-opacity" : "cursor-default"}`}
-      style={{ width: size, height: size, fontSize: size * 0.4, backgroundColor: bgColor }}
+      style={{
+        ...style,
+        background: `linear-gradient(135deg, ${c1}, ${c2})`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#fff',
+        fontSize,
+        fontWeight: 600,
+        fontFamily: 'Inter, sans-serif',
+        letterSpacing: '0.02em',
+      }}
     >
       {initials}
     </button>

@@ -1,13 +1,13 @@
-"use client";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { getActiveListings, getUser } from "../../../services/database";
-import { useAuth } from "../../../context/AuthContext";
-import { useToast } from "../../../components/Toast";
-import ListingCard from "../../../components/ListingCard";
-import CategoryChips from "../../../components/CategoryChips";
-import { ListingSkeleton } from "../../../components/Skeleton";
-import Icon from "../../../components/Icon";
+\"use client\";
+import { useState, useEffect, useRef, useCallback } from \"react\";
+import { useRouter } from \"next/navigation\";
+import { getActiveListings, getUser } from \"../../../services/database\";
+import { useAuth } from \"../../../context/AuthContext\";
+import { useToast } from \"../../../components/Toast\";
+import ListingCard from \"../../../components/ListingCard\";
+import CategoryChips from \"../../../components/CategoryChips\";
+import { ListingSkeleton } from \"../../../components/Skeleton\";
+import Icon from \"../../../components/Icon\";
 
 export default function ExplorePage() {
   const router = useRouter();
@@ -15,9 +15,9 @@ export default function ExplorePage() {
   const toast = useToast();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
-  const [sort, setSort] = useState("newest");
+  const [search, setSearch] = useState(\"\");
+  const [category, setCategory] = useState(\"\");
+  const [sort, setSort] = useState(\"newest\");
   const [refreshing, setRefreshing] = useState(false);
   const touchStart = useRef(0);
   const touchY = useRef(0);
@@ -33,7 +33,7 @@ export default function ExplorePage() {
       );
       setListings(withUsers.filter((l) => l.userData));
     } catch {
-      toast("Failed to load listings", "error");
+      toast(\"Failed to load listings\", \"error\");
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -54,91 +54,158 @@ export default function ExplorePage() {
       if (category && !l.title.toLowerCase().includes(category.toLowerCase())) return false;
       if (search) {
         const q = search.toLowerCase();
-        const name = (l.userData?.display_name || "").toLowerCase();
-        const user = (l.telegram_username || "").toLowerCase();
+        const name = (l.userData?.display_name || \"\").toLowerCase();
+        const user = (l.telegram_username || \"\").toLowerCase();
         const title = l.title.toLowerCase();
         if (!name.includes(q) && !user.includes(q) && !title.includes(q)) return false;
       }
       return true;
     })
-    .sort((a, b) => sort === "newest" ? new Date(b.posted_at) - new Date(a.posted_at) : (b.contact_taps || 0) - (a.contact_taps || 0));
+    .sort((a, b) => sort === \"newest\" ? new Date(b.posted_at) - new Date(a.posted_at) : (b.contact_taps || 0) - (a.contact_taps || 0));
 
   return (
-    <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} className="animate-fadeIn" style={{ marginBottom: "250px" }}>
-      <div className="flex items-center justify-between mb-8">
+    <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} className=\"animate-fadeIn\">
+
+      {/* ── Page Header ─────────────────────────────── */}
+      <div className=\"flex items-center justify-between mb-8\">
         <div>
-          <h1 className="text-[26px] font-light text-text" style={{ fontFamily: "var(--font-heading)" }}>Explore</h1>
-          <p className="text-text-secondary text-[13px] mt-1.5">Find referral partners</p>
+          <div className=\"flex items-center gap-2 mb-1\">
+            <h1
+              className=\"text-[28px] font-bold tracking-tight\"
+              style={{
+                background: 'linear-gradient(135deg, #e2e8f8 0%, #8b9dc0 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
+              Explore
+            </h1>
+          </div>
+          <p className=\"text-[13px]\" style={{ color: 'var(--color-text-muted)' }}>
+            Find referral partners •{\" \"}
+            <span style={{ color: 'var(--color-primary)' }}>{filtered.length} listings</span>
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="bg-bg-inset border border-border text-text text-[12px] rounded-lg px-2.5 py-2 outline-none focus:border-primary transition-colors cursor-pointer appearance-none"
-          >
-            <option value="newest">Newest</option>
-            <option value="taps">Most Taps</option>
-          </select>
-        </div>
+
+        {/* Sort Select */}
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          className=\"text-[12px] rounded-xl px-3 py-2 outline-none cursor-pointer transition-all\"
+          style={{
+            background: 'rgba(13,17,30,0.8)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            color: 'var(--color-text-secondary)',
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <option value=\"newest\">Newest first</option>
+          <option value=\"taps\">Most popular</option>
+        </select>
       </div>
 
-      <div className="relative mb-5">
-        <Icon name="search" size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+      {/* ── Search Bar ──────────────────────────────── */}
+      <div className=\"relative mb-4\">
+        <Icon
+          name=\"search\"
+          size={14}
+          className=\"absolute left-3.5 top-1/2 -translate-y-1/2\"
+          style={{ color: 'var(--color-text-muted)' }}
+        />
         <input
-          type="text"
+          type=\"text\"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search listings..."
-          className="w-full bg-bg-inset border border-border text-text text-[13px] rounded-lg pl-8 pr-8 py-2.5 outline-none focus:border-primary transition-colors placeholder:text-text-muted"
+          placeholder=\"Search by name, username, or listing…\"
+          className=\"w-full text-[13px] rounded-xl pl-9 pr-9 py-3 outline-none transition-all\"
+          style={{
+            background: 'rgba(8,12,24,0.6)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            color: 'var(--color-text)',
+            backdropFilter: 'blur(8px)',
+          }}
+          onFocus={e => {
+            e.currentTarget.style.borderColor='rgba(91,141,239,0.4)';
+            e.currentTarget.style.boxShadow='0 0 0 3px rgba(91,141,239,0.08)';
+            e.currentTarget.style.background='rgba(8,12,24,0.85)';
+          }}
+          onBlur={e => {
+            e.currentTarget.style.borderColor='rgba(255,255,255,0.07)';
+            e.currentTarget.style.boxShadow='none';
+            e.currentTarget.style.background='rgba(8,12,24,0.6)';
+          }}
         />
         {search && (
-          <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text">
-            <Icon name="x" size={14} />
+          <button
+            onClick={() => setSearch(\"\")}
+            className=\"absolute right-3 top-1/2 -translate-y-1/2 transition-opacity\"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            <Icon name=\"x\" size={14} />
           </button>
         )}
       </div>
 
-      <div className="mb-5">
+      {/* ── Category Chips ───────────────────────────── */}
+      <div className=\"mb-6\">
         <CategoryChips selected={category} onSelect={setCategory} />
       </div>
 
+      {/* ── Pull-to-refresh indicator ────────────────── */}
       {refreshing && (
-        <div className="flex justify-center py-3">
-          <div className="spinner" />
+        <div className=\"flex justify-center py-4\">
+          <div className=\"spinner\" />
         </div>
       )}
 
+      {/* ── Listings Grid ────────────────────────────── */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className=\"grid grid-cols-1 sm:grid-cols-2 gap-3\">
           {[...Array(6)].map((_, i) => <ListingSkeleton key={i} />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 animate-fadeIn">
-          <div className="w-14 h-14 rounded-xl bg-bg-inset flex items-center justify-center mx-auto mb-4">
-            <Icon name="search" size={22} className="text-text-muted" />
+        <div className=\"text-center py-20 animate-fadeIn\">
+          <div
+            className=\"w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5\"
+            style={{ background: 'rgba(91,141,239,0.06)', border: '1px solid rgba(91,141,239,0.1)' }}
+          >
+            <Icon name=\"search\" size={24} style={{ color: 'var(--color-text-muted)' }} />
           </div>
-          <p className="text-[15px] font-medium text-text mb-2">
-            {search || category ? "No matches found" : "No listings yet"}
+          <p className=\"text-[16px] font-semibold mb-2\" style={{ color: 'var(--color-text)' }}>
+            {search || category ? \"No matches found\" : \"No listings yet\"}
           </p>
-          <p className="text-[12px] text-text-secondary mb-6 max-w-xs mx-auto leading-relaxed">
+          <p className=\"text-[13px] mb-7 max-w-xs mx-auto leading-relaxed\" style={{ color: 'var(--color-text-secondary)' }}>
             {search || category
-              ? "Try a different search term or category"
-              : "Be the first to post a referral exchange listing"}
+              ? \"Try a different search term or category\"
+              : \"Be the first to post a referral exchange listing\"}
           </p>
           {search || category ? (
-            <button onClick={() => { setSearch(""); setCategory(""); }} className="px-4 py-2 rounded-lg bg-primary text-white text-[12px] font-semibold hover:bg-primary-hover transition-colors">
+            <button
+              onClick={() => { setSearch(\"\"); setCategory(\"\"); }}
+              className=\"px-5 py-2.5 rounded-xl text-[13px] font-semibold text-white transition-all\"
+              style={{ background: 'linear-gradient(135deg, #5b8def, #9b73f0)', boxShadow: '0 4px 16px rgba(91,141,239,0.3)' }}
+            >
               Clear Filters
             </button>
           ) : (
-            <button onClick={() => router.push("/post")} className="px-4 py-2 rounded-lg bg-primary text-white text-[12px] font-semibold hover:bg-primary-hover transition-colors">
+            <button
+              onClick={() => router.push(\"/post\")}
+              className=\"px-5 py-2.5 rounded-xl text-[13px] font-semibold text-white transition-all\"
+              style={{ background: 'linear-gradient(135deg, #5b8def, #9b73f0)', boxShadow: '0 4px 16px rgba(91,141,239,0.3)' }}
+            >
               Post a Listing
             </button>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className=\"grid grid-cols-1 sm:grid-cols-2 gap-3\">
           {filtered.map((l, i) => (
-            <div key={l.id} className="animate-fadeIn" style={{ animationDelay: `${i * 40}ms` }}>
+            <div
+              key={l.id}
+              className=\"animate-fadeIn\"
+              style={{ animationDelay: `${i * 40}ms` }}
+            >
               <ListingCard
                 listing={l}
                 userData={l.userData}

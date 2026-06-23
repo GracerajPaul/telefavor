@@ -1,16 +1,44 @@
+const skeletonStyle = {
+  background: 'rgba(13,17,30,0.75)',
+  backdropFilter: 'blur(16px)',
+  border: '1px solid rgba(255,255,255,0.06)',
+  borderRadius: '14px',
+  padding: '16px',
+};
+
+const barStyle = (w, h = '10px') => ({
+  width: w,
+  height: h,
+  borderRadius: '6px',
+  background: 'linear-gradient(90deg, rgba(91,141,239,0.04) 0%, rgba(91,141,239,0.1) 50%, rgba(91,141,239,0.04) 100%)',
+  backgroundSize: '400px 100%',
+  animation: 'shimmer 1.8s ease-in-out infinite',
+});
+
 export function ListingSkeleton() {
   return (
-    <div className="rounded-xl border border-border p-4">
-      <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-full skeleton flex-shrink-0" />
-        <div className="flex-1 space-y-2">
-          <div className="h-3 w-28 skeleton rounded" />
-          <div className="h-2.5 w-20 skeleton rounded" />
+    <div style={skeletonStyle}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+        <div style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, ...barStyle('38px', '38px') }} />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={barStyle('120px', '12px')} />
+          <div style={barStyle('80px', '10px')} />
         </div>
+        <div style={barStyle('56px', '20px', { borderRadius: '100px' })} />
       </div>
-      <div className="mt-3 pt-3 border-t border-border space-y-2">
-        <div className="h-3.5 w-3/4 skeleton rounded" />
-        <div className="h-3 w-full skeleton rounded" />
+
+      {/* Divider */}
+      <div style={{ margin: '14px 0', height: '1px', background: 'rgba(255,255,255,0.05)' }} />
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={barStyle('75%', '12px')} />
+        <div style={barStyle('100%', '10px')} />
+        <div style={barStyle('55%', '10px')} />
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '14px' }}>
+        <div style={barStyle('90px', '10px')} />
+        <div style={barStyle('60px', '10px')} />
       </div>
     </div>
   );
@@ -18,24 +46,24 @@ export function ListingSkeleton() {
 
 export function ProfileSkeleton() {
   return (
-    <div className="space-y-4">
-      <div className="rounded-xl border border-border p-5">
-        <div className="flex gap-4">
-          <div className="w-12 h-12 rounded-full skeleton flex-shrink-0" />
-          <div className="flex-1 space-y-2">
-            <div className="h-4 w-40 skeleton rounded" />
-            <div className="h-3 w-24 skeleton rounded" />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={skeletonStyle}>
+        <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ width: 52, height: 52, borderRadius: '50%', flexShrink: 0, ...barStyle('52px', '52px') }} />
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', paddingTop: '4px' }}>
+            <div style={barStyle('160px', '14px')} />
+            <div style={barStyle('100px', '11px')} />
           </div>
         </div>
-        <div className="mt-4 space-y-3">
-          <div className="h-10 skeleton rounded-lg" />
-          <div className="h-10 skeleton rounded-lg" />
+        <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ ...barStyle('100%', '44px'), borderRadius: '12px' }} />
+          <div style={{ ...barStyle('100%', '44px'), borderRadius: '12px' }} />
         </div>
       </div>
-      <div className="rounded-xl border border-border p-5 space-y-3">
-        <div className="h-3 w-20 skeleton rounded" />
-        <div className="h-4 w-full skeleton rounded" />
-        <div className="h-4 w-3/4 skeleton rounded" />
+      <div style={{ ...skeletonStyle, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={barStyle('80px', '11px')} />
+        <div style={barStyle('100%', '12px')} />
+        <div style={barStyle('70%', '12px')} />
       </div>
     </div>
   );
